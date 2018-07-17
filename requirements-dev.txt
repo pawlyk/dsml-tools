@@ -1,0 +1,9 @@
+pytest
+pytest-cov
+flake8
+numpy
+scipy
+matplotlib
+pandas
+scikit-learn
+seaborn
