@@ -31,7 +31,7 @@ clean:
 	rm -rf docs/_build
 
 # Check pep8 rules
-flake:
+flake: checkrst
 	 flake8 dsmlt/ tests/
 
 # Targets for testing
@@ -43,9 +43,12 @@ vtest: flake
 	py.test -s -v $(FLAGS) ./tests/
 
 # Make coverage report
-cov cover coverage: flake
+cov cover coverage: flake checkrst
 	py.test -s -v --cov-report term --cov-report html --cov dsmlt ./tests
 	@echo "open file://`pwd`/htmlcov/index.html"
+
+checkrst:
+	python setup.py check --restructuredtext
 
 # Install the package from source
 install:
