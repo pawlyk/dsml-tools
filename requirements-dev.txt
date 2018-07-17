@@ -2,8 +2,8 @@ pytest
 pytest-cov
 flake8
 numpy
-scipy
+#scipy
 matplotlib
 pandas
-scikit-learn
-seaborn
+#scikit-learn
+#seaborn

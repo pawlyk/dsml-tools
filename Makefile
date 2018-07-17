@@ -57,3 +57,4 @@ install:
 # Setup packages need for development
 setup:
 	pip install -r requirements-dev.txt
+	pip install -Ue .
