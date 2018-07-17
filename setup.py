@@ -51,7 +51,7 @@ setup(name='dsmlt',
       version=read_version(),
       description=('dsmlt is a set of data science and machine learning '
                    'tools'),
-      long_description='\n\n'.join((read('README.md'), read('CHANGES.txt'))),
+      long_description='\n\n'.join((read('README.rst'), read('CHANGES.txt'))),
       classifiers=classifiers,
       platforms=['POSIX'],
       author='Pavlo Stadnikov',
