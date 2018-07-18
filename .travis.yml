@@ -9,7 +9,7 @@ install:
   - pip install --upgrade setuptools
   - pip install codecov
   - pip install -r requirements-dev.txt
-  - make install
+  - pip install -vv -Ue .
 
 script:
   make cov-report
