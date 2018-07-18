@@ -14,11 +14,11 @@ def read(f):
     return open(os.path.join(os.path.dirname(__file__), f)).read().strip()
 
 
-install_requires = [
-    'numpy',
-    'pandas',
-    'matplotlib',
-]
+def read_requirements():
+    with open('requirements.txt') as f:
+        return f.read().strip().split('\n')
+
+
 extras_require = {}
 
 
@@ -42,6 +42,7 @@ classifiers = [
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
     'Operating System :: POSIX',
     'Development Status :: 3 - Dev',
 ]
@@ -60,6 +61,6 @@ setup(name='dsmlt',
       download_url='https://github.com/pawlyk/dsml-tools',
       license='MIT',
       packages=find_packages(),
-      install_requires=install_requires,
+      install_requires=read_requirements(),
       extras_require=extras_require,
       include_package_data=True)
