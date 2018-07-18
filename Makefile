@@ -1,12 +1,15 @@
 # Shell to use with Make
 SHELL := /bin/bash
 
+# Setup flags
+FLAGS=
+
 # Set important Paths
 PROJECT := dsmlt
 LOCALPATH := $(CURDIR)/$(PROJECT)
 
 # Export targets not associated with files
-.PHONY: clean flake test vtest coverage install setup
+.PHONY: clean flake test vtest cov  cov-report checkrst install setup
 
 # Clean build files
 clean:
@@ -42,9 +45,13 @@ test: flake
 vtest: flake
 	py.test -s -v $(FLAGS) ./tests/
 
-# Make coverage report
+# Make tests with coverage
 cov cover coverage: flake checkrst
-	py.test -s -v --cov-report term --cov-report html --cov dsmlt ./tests
+	py.test -s -v --cov dsmlt $(FLAGS) ./tests
+
+# Make coverage report
+cov-report cover-report coverage-report: flake checkrst
+	py.test -s -v --cov-report term --cov-report html --cov dsmlt $(FLAGS) ./tests
 	@echo "open file://`pwd`/htmlcov/index.html"
 
 checkrst:

@@ -10,9 +10,9 @@ install:
   - pip install --upgrade setuptools
   - pip install codecov
   - pip install -r requirements-dev.txt
-  - pip install -vv -Ue .
+  - make install
 
 script:
-  make cov
+  make cov-report
 after_success:
   codecov
