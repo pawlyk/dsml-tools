@@ -4,6 +4,7 @@ sudo: required
 python:
   - '3.5'
   - '3.6'
+  - 'pypy-3.5'
 
 install:
   - pip install --upgrade setuptools
