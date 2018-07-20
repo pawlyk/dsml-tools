@@ -42,6 +42,7 @@ def random_narray(
         out : ndarray
             size-shaped array of random generated numbers.
     """
+    # prepare astype parameter
     if not astype:
         astype = dtype
 
@@ -50,6 +51,7 @@ def random_narray(
             'Passed invalid value of `astype` - {}.'.format(astype)
         )
 
+    # generate random data
     if dtype in INTEGERS:
         out = np.random.randint(
             low=low, high=high, size=size, dtype=dtype).astype(astype)
@@ -59,6 +61,13 @@ def random_narray(
         raise AttributeError(
             'Passed invalid value of `dtype` - {}.'.format(dtype)
         )
+
+    # corrupt data with p_missing probability
+    if p_missing:
+        mask = np.random.binomial(1, p_missing, size=out.shape) == 1
+        if out.dtype.type in INTEGERS:
+            out = out.astype(np.float)
+        out[mask] = np.NAN
 
     return out
 

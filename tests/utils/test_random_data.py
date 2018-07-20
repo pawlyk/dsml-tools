@@ -55,6 +55,15 @@ def test_random_narray():
     data = utils.random_narray(size, dtype=np.int64, astype=np.int8)
     assert data.dtype.type == np.int8
 
+    # test data corruption
+    size = utils.random_size(3, low=1, high=10)
+    data = utils.random_narray(size, p_missing=0)
+    assert np.sum(np.isnan(data)) == 0
+    data = utils.random_narray(size, p_missing=0.5)
+    assert np.sum(np.isnan(data)) > data.size / 2
+    data = utils.random_narray(size, p_missing=1)
+    assert np.sum(np.isnan(data)) == data.size
+
     # test dtype float
     size = utils.random_size(3, low=1, high=10)
     data = utils.random_narray(size, dtype=np.float)
@@ -87,6 +96,15 @@ def test_random_narray():
 
     data = utils.random_narray(size, dtype=np.float16, astype=np.float128)
     assert data.dtype.type == np.float128
+
+    # test data corruption
+    size = utils.random_size(3, low=1, high=10)
+    data = utils.random_narray(size, dtype=float, p_missing=0)
+    assert np.sum(np.isnan(data)) == 0
+    data = utils.random_narray(size, dtype=float, p_missing=0.5)
+    assert np.sum(np.isnan(data)) > data.size / 2
+    data = utils.random_narray(size, dtype=float, p_missing=1)
+    assert np.sum(np.isnan(data)) == data.size
 
     # test wrong type
     with pytest.raises(AttributeError) as exc:
