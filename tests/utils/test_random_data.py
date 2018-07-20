@@ -22,7 +22,7 @@ def test_random_size():
 
 
 def test_random_narray():
-    # test int
+    # test dtype int
     size = utils.random_size(3, low=1, high=10)
     data = utils.random_narray(size)
 
@@ -47,7 +47,15 @@ def test_random_narray():
         data = utils.random_narray(size, dtype=type_)
         assert data.dtype.type == type_expected
 
-    # test float
+    # test asytype int
+    size = utils.random_size(3, low=1, high=10)
+    data = utils.random_narray(size, dtype=np.int8, astype=np.int64)
+    assert data.dtype.type == np.int64
+
+    data = utils.random_narray(size, dtype=np.int64, astype=np.int8)
+    assert data.dtype.type == np.int8
+
+    # test dtype float
     size = utils.random_size(3, low=1, high=10)
     data = utils.random_narray(size, dtype=np.float)
 
@@ -72,9 +80,32 @@ def test_random_narray():
         data = utils.random_narray(size, dtype=type_)
         assert data.dtype.type == type_expected
 
+    # test asytype float
+    size = utils.random_size(3, low=1, high=10)
+    data = utils.random_narray(size, dtype=np.float, astype=np.float16)
+    assert data.dtype.type == np.float16
+
+    data = utils.random_narray(size, dtype=np.float16, astype=np.float128)
+    assert data.dtype.type == np.float128
+
     # test wrong type
-    with pytest.raises(AttributeError):
+    with pytest.raises(AttributeError) as exc:
         utils.random_narray((1, 2, 3, ), dtype=list)
+    assert str(exc.value) == \
+        "Passed invalid value of `astype` - <class 'list'>."
 
     with pytest.raises(AttributeError):
-        utils.random_narray((1, 2, 3,), dtype='wrong type')
+        utils.random_narray((1, 2, 3, ), dtype='wrong type')
+    assert str(exc.value) == \
+        "Passed invalid value of `astype` - <class 'list'>."
+
+    # test wrong astype
+    with pytest.raises(AttributeError):
+        utils.random_narray((1, 2, 3, ), astype=list)
+    assert str(exc.value) == \
+        "Passed invalid value of `astype` - <class 'list'>."
+
+    with pytest.raises(AttributeError):
+        utils.random_narray((1, 2, 3, ), astype='wrong type')
+    assert str(exc.value) == \
+        "Passed invalid value of `astype` - <class 'list'>."

@@ -1,7 +1,7 @@
 import numpy as np
 # import pandas as ps
 
-from ..constants import INTEGERS, FLOATS
+from ..constants import INTEGERS, FLOATS, NUMERICS
 
 
 __all__ = (
@@ -16,7 +16,7 @@ __all__ = (
 
 def random_narray(
         size: (list, tuple), dtype=int, p_missing: float=0,
-        low=0, high=1,
+        astype=None, low: (int, float)=0, high: (int, float)=1,
 ):
     """
     Generate random n-dimensional array with given type, size and
@@ -42,10 +42,19 @@ def random_narray(
         out : ndarray
             size-shaped array of random generated numbers.
     """
+    if not astype:
+        astype = dtype
+
+    if astype not in NUMERICS:
+        raise AttributeError(
+            'Passed invalid value of `astype` - {}.'.format(astype)
+        )
+
     if dtype in INTEGERS:
-        out = np.random.randint(low=low, high=high, size=size, dtype=dtype)
+        out = np.random.randint(
+            low=low, high=high, size=size, dtype=dtype).astype(astype)
     elif dtype in FLOATS:
-        out = np.random.uniform(low=low, high=high, size=size).astype(dtype)
+        out = np.random.uniform(low=low, high=high, size=size).astype(astype)
     else:
         raise AttributeError(
             'Passed invalid value of `dtype` - {}.'.format(dtype)
