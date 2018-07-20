@@ -1,9 +1,9 @@
 from functools import reduce
 from operator import mul
 
-import pytest
 import numpy as np
 import pandas as pd
+import pytest
 
 from dsmlt import utils
 
@@ -125,21 +125,21 @@ def test_random_narray():
     assert str(exc.value) == \
         "Passed invalid value of `astype` - <class 'list'>."
 
-    with pytest.raises(AttributeError):
+    with pytest.raises(AttributeError) as exc:
         utils.random_narray((1, 2, 3, ), dtype='wrong type')
     assert str(exc.value) == \
-        "Passed invalid value of `astype` - <class 'list'>."
+        "Passed invalid value of `astype` - wrong type."
 
     # test wrong astype
-    with pytest.raises(AttributeError):
+    with pytest.raises(AttributeError) as exc:
         utils.random_narray((1, 2, 3, ), astype=list)
     assert str(exc.value) == \
         "Passed invalid value of `astype` - <class 'list'>."
 
-    with pytest.raises(AttributeError):
+    with pytest.raises(AttributeError) as exc:
         utils.random_narray((1, 2, 3, ), astype='wrong type')
     assert str(exc.value) == \
-        "Passed invalid value of `astype` - <class 'list'>."
+        "Passed invalid value of `astype` - wrong type."
 
 
 def test_random_series():

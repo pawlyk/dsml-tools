@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 from dsmlt import utils
 
@@ -22,6 +23,11 @@ def test_missing():
         assert item_type == np.bool_
     assert result_dataframe.shape == (3, 4, )
     assert result_dataframe.size == 12
+
+    with pytest.raises(AttributeError) as exc:
+        utils.missing('some wrong parameter here')
+    assert str(exc.value) == \
+        "Passed value `points` with invalid type - <class 'str'>."
 
 
 def test_missing_count():
