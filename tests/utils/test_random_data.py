@@ -202,9 +202,9 @@ def test_random_dataframe():
     data = utils.random_dataframe(2, 3, p_missing=0.5)
     assert isinstance(data, pd.DataFrame)
     assert data.shape == (3, 2, )
-    assert data.isna().sum().sum() > 1
+    assert data.isna().sum().sum() >= 1
 
     data = utils.random_dataframe(2, 3, dtype=float, p_missing=0.5)
     assert isinstance(data, pd.DataFrame)
     assert data.shape == (3, 2, )
-    assert data.isna().sum().sum() > 1
+    assert data.isna().sum().sum() >= 1

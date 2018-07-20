@@ -1,7 +1,8 @@
 """
 Helper function for detect missing values
 """
-
+import numpy as np
+import pandas as pd
 
 __all__ = ('missing', 'missing_count', )
 
@@ -10,24 +11,41 @@ def missing(points):
     """
     Returns a boolean array with True if points have missing and False
     otherwise.
+
     Parameters:
     -----------
-        points : An numobservations by numdimensions array of observations.
+        points : numpy array, pandas Series, pandas DataFrame
+            An numobservations by numdimensions array of observations.
+
     Returns:
     --------
-        mask : A numobservations-length boolean array.
+        mask : numpy boolean array
+            A numobservations-length boolean array.
     """
-    return points.isnull()
+    if isinstance(points, (pd.DataFrame, pd.Series)):
+        return points.isnull()
+    elif isinstance(points, np.ndarray):
+        return np.isnan(points)
+    else:
+        raise AttributeError(
+            'Passed value `points` with invalid type - {}.'.format(
+                type(points)
+            )
+        )
 
 
 def missing_count(points):
     """
     Returns a count of missing values.
+
     Parameters:
     -----------
-        points : An numobservations by numdimensions array of observations.
+        points : numpy array, pandas Series, pandas DataFrame
+            An numobservations by numdimensions array of observations.
+
     Returns:
     --------
-        count : A count of missing points.
+        count : int
+            A count of missing points.
     """
     return sum(missing(points))
