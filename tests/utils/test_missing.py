@@ -20,7 +20,7 @@ def test_missing():
     result_dataframe = utils.missing(data_dataframe)
     for item_type in result_dataframe.dtypes.values:
         assert item_type == np.bool_
-    assert result_dataframe.shape == (4, 3)
+    assert result_dataframe.shape == (3, 4, )
     assert result_dataframe.size == 12
 
 

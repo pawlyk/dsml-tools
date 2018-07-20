@@ -142,17 +142,17 @@ def random_series(n: int = 1, dtype=int, p_missing: float=0):
     )
 
 
-def random_dataframe(cols: int=1, rows: int=1, dtype=int, p_missing: float=0):
+def random_dataframe(rows: int=1, cols: int=1, dtype=int, p_missing: float=0):
     """
     Generate random pandas DataFrame with given size of cols and rows,
     type and percentage of corrupted data.
 
     Parameters:
     -----------
-        cols : int, optional
-            Number of columns
         rows : int, optional
             Number of rows
+        cols : int, optional
+            Number of columns
         dtype : dtype, optional
             Desired dtype of the result.
         p_missing : float, optional
