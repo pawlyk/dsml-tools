@@ -1,17 +1,17 @@
+from itertools import islice, permutations
+from math import ceil, log
+from string import ascii_uppercase
+
 import numpy as np
-# import pandas as ps
+import pandas as pd
 
 from ..constants import INTEGERS, FLOATS, NUMERICS
 
 
 __all__ = (
-    'random_narray', 'random_size', 'random_dataframe', 'random_series',
+    'random_narray', 'random_size', 'columns_names_generator',
+    'random_dataframe', 'random_series',
 )
-
-# https://stackoverflow.com/questions/30053329/elegant-way-to-create-empty-pandas-dataframe-with-nan-of-type-float
-# https://pandas.pydata.org/pandas-docs/stable/missing_data.html
-
-# todo realize this functions
 
 
 def random_narray(
@@ -29,9 +29,9 @@ def random_narray(
             m * n * k samples are drawn. Default is None, in which case
             a single value is returned.
         dtype : dtype, optional
-            Desired dtype of the result. Currently support numpy.int and
-            numpy.float
-        p_missing :
+            Desired dtype of the result.
+        p_missing : float, optional
+            Probability of missing data.
         low : float or int, optional
             Lower boundary of the output interval.
         high : float or int, optional
@@ -57,10 +57,6 @@ def random_narray(
             low=low, high=high, size=size, dtype=dtype).astype(astype)
     elif dtype in FLOATS:
         out = np.random.uniform(low=low, high=high, size=size).astype(astype)
-    else:
-        raise AttributeError(
-            'Passed invalid value of `dtype` - {}.'.format(dtype)
-        )
 
     # corrupt data with p_missing probability
     if p_missing:
@@ -90,7 +86,6 @@ def random_size(n: int=None, low=0, high=100):
     -------
         size : tuple
             Randomly generated tuple.
-
     """
     def randomint():
         return np.random.randint(low, high)
@@ -101,9 +96,74 @@ def random_size(n: int=None, low=0, high=100):
     return tuple(randomint() for _ in range(n))
 
 
-def random_series(n: int = 1, dtype=int, n_missing: int=0):
-    pass
+def columns_names_generator(n_names):
+    """
+    Generate sequence of columns names.
+
+    Parameters:
+    ----------
+        n_names : int
+            Number of names in sequence that should be generated.
+
+    Returns:
+    -------
+        name_sequence : list of strings
+            Generated sequence of names.
+
+    """
+    r_length = ceil(log(n_names, len(ascii_uppercase)))
+    return [
+        ''.join(_)
+        for _ in islice(permutations(ascii_uppercase, r_length), n_names)
+    ]
 
 
-def random_dataframe(col: int=1, row: int=1, dtype=int, n_missing: int=0):
-    pass
+def random_series(n: int = 1, dtype=int, p_missing: float=0):
+    """
+    Generate random pandas Series with given length, type and
+    percentage of corrupted data.
+
+    Parameters:
+    -----------
+        n : int, optional
+            Length of Series.
+        dtype : dtype, optional
+            Desired dtype of the result.
+        p_missing : float, optional
+            Probability of missing data.
+
+    Returns:
+    --------
+        out : pandas.Series
+    """
+    return pd.Series(
+        random_narray(size=n, dtype=dtype, p_missing=p_missing),
+        dtype=dtype
+    )
+
+
+def random_dataframe(cols: int=1, rows: int=1, dtype=int, p_missing: float=0):
+    """
+    Generate random pandas DataFrame with given size of cols and rows,
+    type and percentage of corrupted data.
+
+    Parameters:
+    -----------
+        cols : int, optional
+            Number of columns
+        rows : int, optional
+            Number of rows
+        dtype : dtype, optional
+            Desired dtype of the result.
+        p_missing : float, optional
+            Probability of missing data.
+
+    Returns:
+    --------
+        out : pandas.DataFrame
+    """
+    size = (rows, cols, )
+    return pd.DataFrame(
+        random_narray(size=size, dtype=dtype, p_missing=p_missing),
+        columns=columns_names_generator(cols)
+    )

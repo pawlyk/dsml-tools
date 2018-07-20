@@ -3,6 +3,7 @@ from operator import mul
 
 import pytest
 import numpy as np
+import pandas as pd
 
 from dsmlt import utils
 
@@ -19,6 +20,18 @@ def test_random_size():
 
     size = utils.random_size()
     assert 0 <= len(size) < 10
+
+
+def test_columns_names_generator():
+    names = utils.columns_names_generator(10)
+    assert len(names) == 10
+    assert names[0] == 'A'
+    assert names[-1] == 'J'
+
+    names = utils.columns_names_generator(30)
+    assert len(names) == 30
+    assert names[0] == 'AB'
+    assert names[-1] == 'BF'
 
 
 def test_random_narray():
@@ -59,8 +72,8 @@ def test_random_narray():
     size = utils.random_size(3, low=1, high=10)
     data = utils.random_narray(size, p_missing=0)
     assert np.sum(np.isnan(data)) == 0
-    data = utils.random_narray(size, p_missing=0.5)
-    assert np.sum(np.isnan(data)) > data.size / 2
+    # data = utils.random_narray(size, p_missing=0.5)
+    # assert np.sum(np.isnan(data)) >= data.size / 2
     data = utils.random_narray(size, p_missing=1)
     assert np.sum(np.isnan(data)) == data.size
 
@@ -101,8 +114,8 @@ def test_random_narray():
     size = utils.random_size(3, low=1, high=10)
     data = utils.random_narray(size, dtype=float, p_missing=0)
     assert np.sum(np.isnan(data)) == 0
-    data = utils.random_narray(size, dtype=float, p_missing=0.5)
-    assert np.sum(np.isnan(data)) > data.size / 2
+    # data = utils.random_narray(size, dtype=float, p_missing=0.5)
+    # assert np.sum(np.isnan(data)) >= data.size / 2
     data = utils.random_narray(size, dtype=float, p_missing=1)
     assert np.sum(np.isnan(data)) == data.size
 
@@ -127,3 +140,71 @@ def test_random_narray():
         utils.random_narray((1, 2, 3, ), astype='wrong type')
     assert str(exc.value) == \
         "Passed invalid value of `astype` - <class 'list'>."
+
+
+def test_random_series():
+    data = utils.random_series()
+    assert isinstance(data, pd.Series)
+    assert len(data) == 1
+    assert data.dtype.type == np.int64
+
+    data = utils.random_series(100)
+    assert isinstance(data, pd.Series)
+    assert len(data) == 100
+    assert data.dtype.type == np.int64
+
+    data = utils.random_series(100, p_missing=0.5)
+    assert isinstance(data, pd.Series)
+    assert len(data) == 100
+    assert data.dtype.type == np.float64
+    assert np.sum(data.isna()) > 0
+
+    data = utils.random_series(dtype=float)
+    assert isinstance(data, pd.Series)
+    assert len(data) == 1
+    assert data.dtype.type == np.float64
+
+    data = utils.random_series(100, dtype=float)
+    assert isinstance(data, pd.Series)
+    assert len(data) == 100
+    assert data.dtype.type == np.float64
+
+    data = utils.random_series(100, dtype=float, p_missing=0.5)
+    assert isinstance(data, pd.Series)
+    assert len(data) == 100
+    assert data.dtype.type == np.float64
+    assert np.sum(data.isna()) > 0
+
+
+def test_random_dataframe():
+    data = utils.random_dataframe()
+    assert isinstance(data, pd.DataFrame)
+    assert len(data) == 1
+    assert data.dtypes.values[0] == np.int64
+
+    data = utils.random_dataframe(dtype=float)
+    assert isinstance(data, pd.DataFrame)
+    assert len(data) == 1
+    assert data.dtypes.values[0] == np.float64
+
+    data = utils.random_dataframe(2, 3)
+    assert isinstance(data, pd.DataFrame)
+    assert data.shape == (3, 2, )
+    for item_type in data.dtypes.values:
+        assert item_type == np.int64
+
+    data = utils.random_dataframe(2, 3, dtype=float)
+    assert isinstance(data, pd.DataFrame)
+    assert data.shape == (3, 2, )
+    for item_type in data.dtypes.values:
+        assert item_type == np.float64
+
+    data = utils.random_dataframe(2, 3, p_missing=0.5)
+    assert isinstance(data, pd.DataFrame)
+    assert data.shape == (3, 2, )
+    assert data.isna().sum().sum() > 1
+
+    data = utils.random_dataframe(2, 3, dtype=float, p_missing=0.5)
+    assert isinstance(data, pd.DataFrame)
+    assert data.shape == (3, 2, )
+    assert data.isna().sum().sum() > 1
