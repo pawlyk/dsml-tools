@@ -24,8 +24,10 @@ def missing(points):
     """
     if isinstance(points, (pd.DataFrame, pd.Series)):
         return points.isnull()
+
     elif isinstance(points, np.ndarray):
         return np.isnan(points)
+
     else:
         raise AttributeError(
             'Passed value `points` with invalid type - {}.'.format(
@@ -48,4 +50,15 @@ def missing_count(points):
         count : int
             A count of missing points.
     """
-    return sum(missing(points))
+    if isinstance(points, (pd.DataFrame, pd.Series)):
+        return missing(points).values.sum()
+
+    elif isinstance(points, np.ndarray):
+        return np.sum(missing(points))
+
+    else:
+        raise AttributeError(
+            'Passed value `points` with invalid type - {}.'.format(
+                type(points)
+            )
+        )

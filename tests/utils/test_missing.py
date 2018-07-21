@@ -32,11 +32,16 @@ def test_missing():
 
 def test_missing_count():
     size = utils.random_size(3, low=1, high=10)
-    data_ndarray = utils.random_narray(size, p_missing=0.2)
-    assert utils.missing_count(data_ndarray) > 1
+    data_ndarray = utils.random_narray(size, p_missing=0.5)
+    assert utils.missing_count(data_ndarray) >= 1
 
-    data_series = utils.random_series(20, p_missing=0.2)
-    assert utils.missing_count(data_series) > 1
+    data_series = utils.random_series(20, p_missing=0.5)
+    assert utils.missing_count(data_series) >= 1
 
-    data_dataframe = utils.random_dataframe(3, 4, p_missing=0.2)
-    assert utils.missing_count(data_dataframe) > 1
+    data_dataframe = utils.random_dataframe(3, 4, p_missing=0.5)
+    assert utils.missing_count(data_dataframe) >= 1
+
+    with pytest.raises(AttributeError) as exc:
+        utils.missing_count('some wrong parameter here')
+    assert str(exc.value) == \
+        "Passed value `points` with invalid type - <class 'str'>."
