@@ -2,7 +2,7 @@ pytest==3.6.3
 pytest-cov==2.5.1
 flake8==3.5.0
 Cython==0.28.4
-numpy
+numpy==1.15.0
 #scipy
 matplotlib
 pandas
