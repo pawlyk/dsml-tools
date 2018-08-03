@@ -4,7 +4,7 @@ Helper function for detect missing values
 import numpy as np
 import pandas as pd
 
-__all__ = ('missing', 'missing_count', )
+__all__ = ('missing', 'missing_count', 'single_missing', )
 
 
 def single_missing(points,
