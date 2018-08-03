@@ -1,7 +1,6 @@
 import numpy as np
 import pytest
 from pandas import DataFrame, Series
-from numpy import NAN
 
 from dsmlt.utils import (
     missing, missing_count,
@@ -12,7 +11,7 @@ from dsmlt.utils import (
 class TestMissingFunction:
 
     def test_simple_numpy_ndarray(self):
-        # Test on presence nan value
+        # Test on presence NAN value
         size = random_size(3, low=1, high=10)
         data_ndarray = random_narray(size, p_missing=0.2)
         result_ndarray = missing(data_ndarray)
@@ -20,27 +19,34 @@ class TestMissingFunction:
         assert result_ndarray.shape == size
 
         data_ndarray = np.array(
-            [[1, 2, 3, 4, NAN],
+            [[1, 2, 3, 4, np.NAN],
              [5, 6, 7, 8, 9]]
         )
-        assert any(missing(data_ndarray))
+        assert missing(data_ndarray).any()
 
         # Test on presence optional None value as missing
         data_ndarray = np.array(
             [[1, 2, 3, 4, None],
              [5, 6, 7, 8, 9]]
         )
-        assert any(missing(data_ndarray))
+        assert missing(data_ndarray).any()
+
+        # Test on presence optional 999 value as missing
+        data_ndarray = np.array(
+            [[1, 2, 3, 4, 999],
+             [5, 6, 7, 8, 9]]
+        )
+        assert missing(data_ndarray, missing_value=999).any()
 
     def test_simple_pandas_series(self):
-        # Test on presence nan value
+        # Test on presence NAN value
         data_series = random_series(20, p_missing=0.2)
         result_series = missing(data_series)
         assert result_series.dtype.type == np.bool_
         assert result_series.shape == (20,)
         assert result_series.size == 20
 
-        data_series = Series([1, 2, 3, 4, 5, NAN, '', 'None'])
+        data_series = Series([1, 2, 3, 4, 5, np.NAN, '', 'None'])
         assert any(missing(data_series))
 
         # Test on presence optional None value as missing
@@ -65,7 +71,7 @@ class TestMissingFunction:
         assert any(missing(data_series, missing_value=(999, 'a', '')))
 
     def test_simple_pandas_dataframe(self):
-        # Test on presence nan value
+        # Test on presence NAN value
         data_dataframe = random_dataframe(3, 4, p_missing=0.2)
         result_dataframe = missing(data_dataframe)
         for item_type in result_dataframe.dtypes.values:
@@ -74,8 +80,8 @@ class TestMissingFunction:
         assert result_dataframe.size == 12
 
         data_dataframe = DataFrame({
-            'one': [1, 2, 3, 4, 5, NAN, '', 'None'],
-            'two': [1, 2, NAN, 4, 5, 6, '', 'None'],
+            'one': [1, 2, 3, 4, 5, np.NAN, '', 'None'],
+            'two': [1, 2, np.NAN, 4, 5, 6, '', 'None'],
         })
         assert any(missing(data_dataframe))
 
@@ -120,6 +126,12 @@ class TestMissingFunction:
             missing('some wrong parameter here')
         assert str(exc.value) == \
             "Passed value `points` with invalid type - <class 'str'>."
+
+    def test_wrong_missing_value(self):
+        with pytest.raises(AttributeError) as exc:
+            missing(np.array([1, 2, 3]), missing_value={'a': 1, 'b': 2})
+        assert str(exc.value) == \
+            "Passed value `missing_value` with invalid type - <class 'dict'>."
 
 
 class TestMissingCountFunction:
