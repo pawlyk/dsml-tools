@@ -41,6 +41,11 @@ def random_narray(
     --------
         out : ndarray
             size-shaped array of random generated numbers.
+
+    Raises:
+    -------
+        AttributeError
+            If passed invalid type of `astype` value.
     """
     # prepare astype parameter
     if not astype:
