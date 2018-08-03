@@ -199,12 +199,12 @@ def test_random_dataframe():
     for item_type in data.dtypes.values:
         assert item_type == np.float64
 
-    data = utils.random_dataframe(2, 3, p_missing=0.5)
+    data = utils.random_dataframe(3, 4, p_missing=0.5)
     assert isinstance(data, pd.DataFrame)
-    assert data.shape == (2, 3, )
+    assert data.shape == (3, 4, )
     assert data.isna().values.sum() >= 1
 
-    data = utils.random_dataframe(2, 3, dtype=float, p_missing=0.5)
+    data = utils.random_dataframe(3, 4, dtype=float, p_missing=0.5)
     assert isinstance(data, pd.DataFrame)
-    assert data.shape == (2, 3, )
+    assert data.shape == (3, 4, )
     assert data.isna().values.sum() >= 1
