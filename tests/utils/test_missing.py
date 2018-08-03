@@ -1,12 +1,10 @@
-from unittest import TestCase
-
 import numpy as np
 import pytest
 
 from dsmlt import utils
 
 
-class TestMissingFunction(TestCase):
+class TestMissingFunction:
 
     def test_simple_numpy_ndarray(self):
         size = utils.random_size(3, low=1, high=10)
@@ -37,7 +35,7 @@ class TestMissingFunction(TestCase):
             "Passed value `points` with invalid type - <class 'str'>."
 
 
-class TestMissingCountFunction(TestCase):
+class TestMissingCountFunction:
 
     def test_simple_numpy_ndarray(self):
         size = utils.random_size(3, low=1, high=10)
