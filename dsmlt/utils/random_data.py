@@ -46,6 +46,11 @@ def random_narray(
     ------
         AttributeError
             If passed invalid type of `astype` value.
+
+    See also
+    --------
+        random_size, columns_names_generator, random_series,
+        random_dataframe
     """
     # prepare astype parameter
     if not astype:
@@ -90,6 +95,11 @@ def random_size(n: int=None, low=0, high=100):
     -------
         size : tuple
             Randomly generated tuple.
+
+    See also
+    --------
+        random_narray, columns_names_generator, random_series,
+        random_dataframe
     """
     def randomint():
         return np.random.randint(low, high)
@@ -113,6 +123,9 @@ def columns_names_generator(n_names):
         name_sequence : list of strings
             Generated sequence of names.
 
+    See also
+    --------
+        random_narray, random_size, random_series, random_dataframe
     """
     r_length = ceil(log(n_names, len(ascii_uppercase)))
     return [
@@ -138,6 +151,11 @@ def random_series(n: int = 1, dtype=int, p_missing: float=0):
     Returns
     -------
         out : pandas.Series
+
+    See also
+    --------
+        random_narray, random_size, columns_names_generator,
+        random_dataframe
     """
     return pd.Series(
         random_narray(size=n, dtype=dtype, p_missing=p_missing),
@@ -164,6 +182,11 @@ def random_dataframe(rows: int=1, cols: int=1, dtype=int, p_missing: float=0):
     Returns
     -------
         out : pandas.DataFrame
+
+    See also
+    --------
+        random_narray, random_size, columns_names_generator,
+        random_series
     """
     size = (rows, cols, )
     return pd.DataFrame(
