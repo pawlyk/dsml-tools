@@ -9,22 +9,21 @@ __all__ = ('missing', 'missing_count', 'single_missing', )
 
 def single_missing(points,
                    single_missing_value: (int, float, str, None.__class__)):
-    """
-    Function that realize check on missing of given value.
+    """Function that realize check on missing of given value.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
         points : numpy array, pandas Series, pandas DataFrame
             An numobservations by numdimensions array of observations.
         missing_value : int, float, str
             A single value that we accept as indicator of missing value.
 
-    Returns:
-    --------
+    Returns
+    -------
         mask : A numobservations-length boolean array.
 
-    Raises:
-    -------
+    Raises
+    ------
         AttributeError
             If passed invalid type of `points` value, e.g. all types
             except pandas Series/DataFrame or numpy ndarray.
@@ -50,20 +49,20 @@ def missing(points, missing_value: (int, float, str, list, tuple)=np.NAN):
     Returns a boolean array with True if points have missing and False
     otherwise.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
         points : numpy array, pandas Series, pandas DataFrame
             An numobservations by numdimensions array of observations.
         missing_value : int, float, str
                 A single value that we accept as indicator of missing value.
 
-    Returns:
-    --------
+    Returns
+    -------
         mask : numpy boolean array
             A numobservations-length boolean array.
 
-    Raises:
-    -------
+    Raises
+    ------
         AttributeError
             If passed invalid type of `points` value, e.g. all types
             except pandas Series/DataFrame or numpy ndarray.
@@ -94,20 +93,20 @@ def missing_count(points,
     """
     Returns a count of missing values.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
         points : numpy array, pandas Series, pandas DataFrame
             An numobservations by numdimensions array of observations.
         missing_value : int, float, str
             A single value that we accept as indicator of missing value.
 
-    Returns:
-    --------
+    Returns
+    -------
         count : int
             A count of missing points.
 
-    Raises:
-    -------
+    Raises
+    ------
         AttributeError
             If passed invalid type of `points` value        , e.g. all types
             except pandas Series/DataFrame or numpy ndarray.

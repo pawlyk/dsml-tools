@@ -14,13 +14,15 @@ __all__ = ('join_indexes', 'join_indexes_dataframe', )
 def join_indexes(index1, index2, operation: str):
     """
     Join two indexes `index1` and `index2` using operator given by `operation`.
-    Parameters:
-    -----------
+
+    Parameters
+    ----------
         index1 : First index
         index2 : Second index
         operation : Operator - *and* or *or*.
-    Returns:
-    --------
+
+    Returns
+    -------
         mask : A numobservations-length boolean array.
     """
     if not np.issubsctype(index1, bool):
@@ -42,15 +44,17 @@ def join_indexes_dataframe(index: pd.DataFrame, operation: str,
     """
     Join two indexes columns from `index` by columns `columns` using operator
     given by `operation`.
-    Parameters:
-    -----------
+
+    Parameters
+    ----------
         index : Index data frame that contains only True or False
         columns : List of data frame columns. If not given uses all columns
             from data frame
         operation : Operator - *and* or *or*
-        inverse : Inverse columns before apply operation.
-    Returns:
-    --------
+        inverse : Inverse columns before apply operation.\
+
+    Returns
+    -------
         mask : A numobservations-length boolean array.
     """
     def inverse_series(serie, inverse):

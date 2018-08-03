@@ -11,8 +11,9 @@ import numpy as np
 
 __all__ = (
     'DataMapper',
-    'from_explanatory_to_integers',
     'from_boolean_to_integers_map',
+    'from_explanatory_to_integers',
+    'from_integers_to_boolean_map',
 )
 
 
@@ -35,12 +36,13 @@ class DataMapper:
         self.inplace = inplace
 
     def _get_new_data(self, data, empty_column: str=None):
-        """
-        Prepare output data.
-        Parameters:
-        -----------
+        """Prepare output data.
+
+        Parameters
+        ----------
             data: Pandas data frame.
             empty_column : Column name of data frame.
+
         Returns
         -------
             data_new : narray-like, shape (n_samples, n_components)
@@ -68,10 +70,10 @@ class DataMapper:
         return data_new
 
     def _construct_data_types(self, data):
-        """
-        Create map of relation column/type for data.
-        Parameters:
-        -----------
+        """Create map of relation column/type for data.
+
+        Parameters
+        ----------
             data : Pandas data frame.
         """
         self.types_ = dict(zip(data.columns, data.dtypes))
@@ -79,8 +81,9 @@ class DataMapper:
     def _construct_data_mappers(self, data):
         """
         Create map of column/map of data that consists in this column.
-        Parameters:
-        -----------
+
+        Parameters
+        ----------
             data : Pandas data frame.
         """
         # FIXME currently we use only one mapper. In future we need add more
@@ -93,11 +96,12 @@ class DataMapper:
                 )
 
     def _get_mapper_for_column(self, column_name):
-        """
-        Get mapper for given column.
-        Parameters:
-        -----------
+        """Get mapper for given column.
+
+        Parameters
+        ----------
             column_name : Column name of data frame.
+
         Returns
         -------
             data_mapper : dict - mapper for given column.
@@ -107,9 +111,11 @@ class DataMapper:
     def _get_reversed_mapper_for_column(self, column_name):
         """
         Get reversed mapper (where keys and values swap) for given column.
-        Parameters:
-        -----------
+
+        Parameters
+        ----------
             column_name : Column name of data frame.
+
         Returns
         -------
             data_mapper : dict - mapper for given column.
@@ -120,10 +126,12 @@ class DataMapper:
 
     def fit(self, data):
         """Fit the model with data.
+
         Parameters
         ----------
             data : narray-like.
                 Training data that represents as pandas data frame.
+
         Returns
         -------
         self : object
@@ -136,10 +144,12 @@ class DataMapper:
 
     def transform(self, data):
         """Apply data mapper on data.
+
         Parameters
         ----------
             data : narray-like.
                 Training data that represents as pandas data frame.
+
         Returns
         -------
             data_new : narray-like, shape (n_samples, n_components)
@@ -159,10 +169,12 @@ class DataMapper:
 
     def fit_transform(self, data):
         """Fit the model with data and apply data mapper on data.
+
         Parameters
         ----------
             data : narray-like.
                 Training data that represents as pandas data frame.
+
         Returns
         -------
             data_new : narray-like, shape (n_samples, n_components)
@@ -171,11 +183,13 @@ class DataMapper:
         return self.transform(data)
 
     def inverse_transform(self, data):
-        """Transform data back to its original мшуц.
+        """Transform data back to its original view.
+
         Parameters
         ----------
             data : narray-like.
                 Training data that represents as pandas data frame.
+
         Returns
         -------
             data_new : narray-like, shape (n_samples, n_components)
@@ -195,11 +209,13 @@ class DataMapper:
 
     def column_transform(self, data, column):
         """Apply data mapper on data.
+
         Parameters
         ----------
             data : narray-like.
                 Training data that represents as pandas data frame.
             column : Column name of data frame.
+
         Returns
         -------
             data_new : narray-like, shape (n_samples, n_components)
@@ -228,12 +244,14 @@ class DataMapper:
         return data_new
 
     def column_inverse_transform(self, data, column):
-        """Transform data back to its original мшуц.
+        """Transform data back to its original view.
+
         Parameters
         ----------
             data : narray-like.
                 Training data that represents as pandas data frame.
             column : Column name of data frame.
+
         Returns
         -------
             data_new : narray-like, shape (n_samples, n_components)
