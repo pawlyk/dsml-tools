@@ -112,7 +112,6 @@ def missing_count(points,
             If passed invalid type of `points` value        , e.g. all types
             except pandas Series/DataFrame or numpy ndarray.
             If passed invalid type of `missing_value` value.
-
     """
     if isinstance(points, (pd.DataFrame, pd.Series)):
         return missing(points, missing_value=missing_value).values.sum()
