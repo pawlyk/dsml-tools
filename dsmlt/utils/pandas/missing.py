@@ -75,7 +75,8 @@ def missing(points, missing_value: (int, float, str, list, tuple)=np.NAN):
         )
 
 
-def missing_count(points):
+def missing_count(points,
+                  missing_value: (int, float, str, list, tuple)=np.NAN):
     """
     Returns a count of missing values.
 
@@ -83,6 +84,8 @@ def missing_count(points):
     -----------
         points : numpy array, pandas Series, pandas DataFrame
             An numobservations by numdimensions array of observations.
+        missing_value : int, float, str
+            A single value that we accept as indicator of missing value.
 
     Returns:
     --------
@@ -90,10 +93,10 @@ def missing_count(points):
             A count of missing points.
     """
     if isinstance(points, (pd.DataFrame, pd.Series)):
-        return missing(points).values.sum()
+        return missing(points, missing_value=missing_value).values.sum()
 
     elif isinstance(points, np.ndarray):
-        return np.sum(missing(points))
+        return np.sum(missing(points, missing_value=missing_value))
 
     else:
         raise AttributeError(
