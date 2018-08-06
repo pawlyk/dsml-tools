@@ -1,46 +1,29 @@
 import numpy as np
+import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 
-
-__all__ = ('MemoryOptimisation', )
-
-
-"""
-for col in df.columns:
-        col_type = df[col].dtype
-        
-        if col_type != object:
-            c_min = df[col].min()
-            c_max = df[col].max()
-            if str(col_type)[:3] == 'int':
-                if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
-                    df[col] = df[col].astype(np.int8)
-                elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
-                    df[col] = df[col].astype(np.int16)
-                elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
-                    df[col] = df[col].astype(np.int32)
-                elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
-                    df[col] = df[col].astype(np.int64)  
-            else:
-                if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
-                    df[col] = df[col].astype(np.float16)
-                elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
-                    df[col] = df[col].astype(np.float32)
-                else:
-                    df[col] = df[col].astype(np.float64)
-        else:
-            df[col] = df[col].astype('category')
-"""
+from ...constants import NUMERICS
 
 
-class MemoryOptimisation(BaseEstimator, TransformerMixin):
+__all__ = ('MemoryOptimiser', )
+
+
+class MemoryOptimiser(BaseEstimator, TransformerMixin):
     """Transforms features by change each feature to a optimise type.
 
     Parameters
     ----------
-    inter_type : boolean, optional, default False
-        Set to True to perform inter type optimisation e.g. between
-        float and integer.
+    mode : 'auto', 'convert', type, array of types, dict of types
+        Mode in which should perform memory optimisation.
+
+        - 'auto' : simply determine types from training data.
+        - 'convert' : additional to 'auto' perform inter type
+                      optimisation e.g. between float and integer.
+        - type : predefine type of data. Can be python or numpy types.
+        - array of types : predefine type for every feature.
+                           Feature index used as array index.
+        - dict of types : predefine type for every feature.
+                          Feature index/name used as keys.
 
     axis : int (0 by default)
         axis used to optimise along. If 0, independently optimise each
@@ -53,14 +36,14 @@ class MemoryOptimisation(BaseEstimator, TransformerMixin):
     Attributes
     ----------
     data_types_ : ndarray, shape (n_features,)
-        Per feature new data type
+        Per feature new data types.
 
     Examples
     --------
-    >>> from dsmlt.preprocessing import MemoryOptimisation
+    >>> from dsmlt.preprocessing import MemoryOptimiser
     >>>
     >>> data = [[-1, 2], [-0.5, 6], [0, 10], [1, 18]]
-    >>> optimiser = MemoryOptimisation()
+    >>> optimiser = MemoryOptimiser()
     >>> print(optimiser.fit(data))
     MemoryOptimisation(axis=0, copy=True, inter_type=False)
     >>> print(optimiser.data_max_)
@@ -80,11 +63,33 @@ class MemoryOptimisation(BaseEstimator, TransformerMixin):
         Load data reduce memory usage.
     """
 
-    def __init__(self, inter_type=False, axis=0, copy=True):
-        # TODO add axis here
-        self.inter_type = inter_type
+    def __init__(self, mode='auto', axis=0, copy=True):
+        if isinstance(mode, str) and mode in {'auto', 'convert', }:
+            self.mode = mode
+
+        elif isinstance(mode, (list, tuple, dict)):
+            raise NotImplementedError('Not implemented yet.')
+
+        elif mode in NUMERICS:
+            self.mode = mode
+
+        else:
+            raise AttributeError(
+                'Passed invalid value of `mode` - `{}`.'.format(
+                    mode
+                )
+            )
+
         self.axis = axis
         self.copy = copy
+
+    def _reset(self):
+        """Reset internal data-dependent state of the optimiser, if necessary.
+
+        __init__ parameters are not touched.
+        """
+        if hasattr(self, 'data_types_'):
+            del self.data_types_
 
     def _column_analyze_series(self, data):
         pass
@@ -105,6 +110,23 @@ class MemoryOptimisation(BaseEstimator, TransformerMixin):
         # if need iter type optimization realize it too
         pass
 
+    def _fill_data_types(self, data):
+        """Fill map of relation column/type for data with mode as dtype.
+
+        Parameters
+        ----------
+            data : narray-like, pandas Series/DataFrame
+                An numobservations by numdimensions array of observations.
+        """
+        if isinstance(data, pd.Series):
+            self.data_types_ = self.mode
+        elif isinstance(data, pd.DataFrame):
+            self.data_types_ = dict()
+            for column_name in data.columns:
+                self.data_types_[column_name] = self.mode
+        elif isinstance(data, np.ndarray):
+            self.data_types_ = self.mode
+
     def fit(self, data):
         """Fit a preprocessor with data.
 
@@ -117,11 +139,18 @@ class MemoryOptimisation(BaseEstimator, TransformerMixin):
 
         Returns
         -------
-        self : object
-            Returns the instance itself.
-
+            self : object
+                Returns the instance itself.
         """
-        pass
+        if self.mode in {'auto', 'convert', }:
+            self._data_analyze(data)
+
+        elif self.mode in NUMERICS:
+            self._fill_data_types(data)
+
+        else:
+            pass
+            # TODO implement functionality with list and dict of types
 
     def transform(self, data):
         """Apply preprocessor to data.
@@ -135,4 +164,4 @@ class MemoryOptimisation(BaseEstimator, TransformerMixin):
         -------
             data_new : narray-like, shape (n_samples, n_components)
         """
-        pass
+        return data.astype(self.data_types_, copy=self.copy)

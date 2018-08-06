@@ -1,4 +1,4 @@
-from .memory import MemoryOptimisation
+from .memory import MemoryOptimiser
 
 
-__all__ = ('MemoryOptimisation', )
+__all__ = ('MemoryOptimiser', )
