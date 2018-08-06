@@ -32,6 +32,8 @@ def random_narray(
             Desired dtype of the result.
         p_missing : float, optional
             Probability of missing data.
+        astype : dtype, optional
+            Desired dtype of the result.
         low : float or int, optional
             Lower boundary of the output interval.
         high : float or int, optional
@@ -134,7 +136,10 @@ def columns_names_generator(n_names):
     ]
 
 
-def random_series(n: int = 1, dtype=int, p_missing: float=0):
+def random_series(
+        n: int = 1, dtype=int, p_missing: float=0,
+        astype=None, low: (int, float)=0, high: (int, float)=1,
+):
     """
     Generate random pandas Series with given length, type and
     percentage of corrupted data.
@@ -147,6 +152,12 @@ def random_series(n: int = 1, dtype=int, p_missing: float=0):
             Desired dtype of the result.
         p_missing : float, optional
             Probability of missing data.
+        astype : dtype, optional
+            Desired dtype of the result.
+        low : float or int, optional
+            Lower boundary of the output interval.
+        high : float or int, optional
+            Upper boundary of the output interval.
 
     Returns
     -------
@@ -157,13 +168,21 @@ def random_series(n: int = 1, dtype=int, p_missing: float=0):
         random_narray, random_size, columns_names_generator,
         random_dataframe
     """
-    return pd.Series(
-        random_narray(size=n, dtype=dtype, p_missing=p_missing),
+    out = pd.Series(
+        random_narray(size=n, dtype=dtype, p_missing=p_missing,
+                      low=low, high=high),
         dtype=dtype
     )
+    if astype:
+        out = out.astype(astype)
+
+    return out
 
 
-def random_dataframe(rows: int=1, cols: int=1, dtype=int, p_missing: float=0):
+def random_dataframe(
+        rows: int=1, cols: int=1, dtype=int, p_missing: float=0,
+        astype=None, low: (int, float) = 0, high: (int, float) = 1,
+):
     """
     Generate random pandas DataFrame with given size of cols and rows,
     type and percentage of corrupted data.
@@ -178,6 +197,12 @@ def random_dataframe(rows: int=1, cols: int=1, dtype=int, p_missing: float=0):
             Desired dtype of the result.
         p_missing : float, optional
             Probability of missing data.
+        astype : dtype, optional
+            Desired dtype of the result.
+        low : float or int, optional
+            Lower boundary of the output interval.
+        high : float or int, optional
+            Upper boundary of the output interval.
 
     Returns
     -------
@@ -189,7 +214,12 @@ def random_dataframe(rows: int=1, cols: int=1, dtype=int, p_missing: float=0):
         random_series
     """
     size = (rows, cols, )
-    return pd.DataFrame(
-        random_narray(size=size, dtype=dtype, p_missing=p_missing),
+    out = pd.DataFrame(
+        random_narray(size=size, dtype=dtype, p_missing=p_missing,
+                      low=low, high=high),
         columns=columns_names_generator(cols)
     )
+    if astype:
+        out = out.astype(astype)
+
+    return out
