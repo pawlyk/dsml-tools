@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 
-from ...constants import NUMERICS
+from ...constants import NUMERICS, INTEGERS_RANGES, FLOATS_RANGES
 
 
 __all__ = ('MemoryOptimiser', )
@@ -91,11 +91,74 @@ class MemoryOptimiser(BaseEstimator, TransformerMixin):
         if hasattr(self, 'data_types_'):
             del self.data_types_
 
-    def _column_analyze_series(self, data):
-        pass
+    def _analyze_series(self, data):
+        """Analyse pandas Series.
 
-    def _column_analyze_np_array(self, data):
-        pass
+        Parameters
+        ----------
+            data : pandas Series
+                An numobservations by numdimensions array of observations.
+        """
+        origin_type = data.dtype
+        dtype = origin_type
+
+        if origin_type != object:
+            data_min = data.min()
+            data_max = data.max()
+            convert = False
+
+            if self.mode == 'convert':
+                fraction, integral = np.modf(data)
+                if not np.any(fraction):
+                    convert = True
+
+            if str(origin_type)[:3] == 'int' or convert:
+                for nptype, (range_min, range_max) in INTEGERS_RANGES.items():
+                    if data_min > range_min and data_max < range_max:
+                        dtype = nptype
+
+            else:
+                for nptype, (range_min, range_max) in FLOATS_RANGES.items():
+                    if data_min > range_min and data_max < range_max:
+                        dtype = nptype
+
+        else:
+            dtype = 'category'
+
+        return dtype
+
+    def _analyze_np_array(self, data):
+        """Analyse numpy ndarray.
+
+        Parameters
+        ----------
+            data : narray-like
+                An numobservations by numdimensions array of observations.
+        """
+        origin_type = data.dtype.type
+        dtype = origin_type
+
+        if origin_type in NUMERICS:
+            data_min = data.min()
+            data_max = data.max()
+            convert = False
+
+            if self.mode == 'convert':
+                fraction, integral = np.modf(data)
+                if not np.any(fraction):
+                    convert = True
+
+            if str(origin_type).split('.')[1][:3] == 'int' or convert:
+                for nptype, (range_min, range_max) in INTEGERS_RANGES.items():
+                    if data_min > range_min and data_max < range_max:
+                        dtype = nptype
+
+            else:
+                for nptype, (range_min, range_max) in FLOATS_RANGES.items():
+                    if data_min > range_min and data_max < range_max:
+                        dtype = nptype
+
+        return dtype
 
     def _data_analyze(self, data):
         """Create map of relation column/type for data.
@@ -105,10 +168,15 @@ class MemoryOptimiser(BaseEstimator, TransformerMixin):
             data : narray-like, pandas Series/DataFrame
                 An numobservations by numdimensions array of observations.
         """
-        # todo iterate through columns
-        # todo realize better data type
-        # if need iter type optimization realize it too
-        pass
+        if isinstance(data, pd.Series):
+            self.data_types_ = self._analyze_series(data)
+        elif isinstance(data, pd.DataFrame):
+            self.data_types_ = dict()
+            for column_name in data.columns:
+                self.data_types_[column_name] = \
+                    self._analyze_series(data[column_name])
+        elif isinstance(data, np.ndarray):
+            self.data_types_ = self._analyze_np_array(data)
 
     def _fill_data_types(self, data):
         """Fill map of relation column/type for data with mode as dtype.

@@ -121,10 +121,133 @@ class TestMemoryOptimisation:
             assert item_type == np.float16
 
     def test_analyze_numpy_ndarray(self):
-        pass
+        # test mode auto for int
+        data = random_narray(
+            (2, 3, 4), low=0, high=100, dtype=np.int8, astype=np.int64
+        )
+        optimiser = MemoryOptimiser(mode='auto')
+        optimiser.fit(data)
+        assert optimiser.data_types_ == np.int8
+
+        data = optimiser.transform(data)
+        assert data.dtype.type == np.int8
+
+        # test mode auto for float
+        data = random_narray((2, 3, 4), dtype=np.float16, astype=np.float64)
+        optimiser = MemoryOptimiser(mode='auto')
+        optimiser.fit(data)
+        assert optimiser.data_types_ == np.float16
+
+        data = optimiser.transform(data)
+        assert data.dtype.type == np.float16
+
+        # test mode convert for int
+        data = random_narray(
+            (2, 3, 4), low=0, high=100, dtype=np.int8, astype=np.int64
+        )
+        optimiser = MemoryOptimiser(mode='convert')
+        optimiser.fit(data)
+        assert optimiser.data_types_ == np.int8
+
+        data = optimiser.transform(data)
+        assert data.dtype.type == np.int8
+
+        # test mode convert for float
+        data = random_narray(
+            (2, 3, 4), low=0, high=100, dtype=np.int8, astype=np.int64
+        )
+        optimiser = MemoryOptimiser(mode='convert')
+        optimiser.fit(data)
+        assert optimiser.data_types_ == np.int8
+
+        data = optimiser.transform(data)
+        assert data.dtype.type == np.int8
 
     def test_analyze_pandas_series(self):
-        pass
+        # test mode auto for int
+        data = random_series(
+            100, low=0, high=100, dtype=np.int8, astype=np.int64
+        )
+        optimiser = MemoryOptimiser(mode='auto')
+        optimiser.fit(data)
+        assert optimiser.data_types_ == np.int8
+
+        data = optimiser.transform(data)
+        assert data.dtype.type == np.int8
+
+        # test mode auto for float
+        data = random_series(100, dtype=np.float16, astype=np.float64)
+        optimiser = MemoryOptimiser(mode='auto')
+        optimiser.fit(data)
+        assert optimiser.data_types_ == np.float16
+
+        data = optimiser.transform(data)
+        assert data.dtype.type == np.float16
+
+        # test mode convert for int
+        data = random_series(
+            100, low=0, high=100, dtype=np.int8, astype=np.int64
+        )
+        optimiser = MemoryOptimiser(mode='convert')
+        optimiser.fit(data)
+
+        data = optimiser.transform(data)
+        assert data.dtype.type == np.int8
+
+        # test mode convert for float
+        data = random_series(
+            100, low=0, high=100, dtype=np.int8, astype=np.float64
+        )
+        optimiser = MemoryOptimiser(mode='convert')
+        optimiser.fit(data)
+        assert optimiser.data_types_ == np.int8
+
+        data = optimiser.transform(data)
+        assert data.dtype.type == np.int8
 
     def test_analyze_pandas_dataframe(self):
-        pass
+        # test mode auto for int
+        data = random_dataframe(
+            3, 4, low=0, high=100, dtype=np.int8, astype=np.int64
+        )
+        optimiser = MemoryOptimiser(mode='auto')
+        optimiser.fit(data)
+        assert list(optimiser.data_types_.values())[0] == np.int8
+
+        data = optimiser.transform(data)
+        for item_type in data.dtypes.values:
+            assert item_type == np.int8
+
+        # test mode auto for float
+        data = random_dataframe(3, 4, dtype=np.float16, astype=np.float64)
+        optimiser = MemoryOptimiser(mode='auto')
+        optimiser.fit(data)
+        assert list(optimiser.data_types_.values())[0] == np.float16
+
+        data = optimiser.transform(data)
+        for item_type in data.dtypes.values:
+            assert item_type == np.float16
+
+        # test mode convert for int
+        data = random_dataframe(
+            3, 4, low=0, high=100, dtype=np.int8, astype=np.int64
+        )
+        optimiser = MemoryOptimiser(mode='convert')
+        optimiser.fit(data)
+        assert list(optimiser.data_types_.values())[0] == np.int8
+
+        data = optimiser.transform(data)
+        for item_type in data.dtypes.values:
+            assert item_type == np.int8
+
+        # test mode convert for float
+        data = random_dataframe(
+            3, 4, low=0, high=100, dtype=np.int8, astype=np.float64
+        )
+        optimiser = MemoryOptimiser(mode='convert')
+        optimiser.fit(data)
+        assert list(optimiser.data_types_.values())[0] == np.int8
+
+        data = optimiser.transform(data)
+        for item_type in data.dtypes.values:
+            assert item_type == np.int8
