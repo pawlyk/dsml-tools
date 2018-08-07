@@ -22,8 +22,8 @@ def random_narray(
     Generate random n-dimensional array with given type, size and
     percentage of corrupted data.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
         size : int or tuple of ints, optional
             Output shape. If the given shape is, e.g., (m, n, k), then
             m * n * k samples are drawn. Default is None, in which case
@@ -32,20 +32,27 @@ def random_narray(
             Desired dtype of the result.
         p_missing : float, optional
             Probability of missing data.
+        astype : dtype, optional
+            Desired dtype of the result.
         low : float or int, optional
             Lower boundary of the output interval.
         high : float or int, optional
             Upper boundary of the output interval.
 
-    Returns:
-    --------
+    Returns
+    -------
         out : ndarray
             size-shaped array of random generated numbers.
 
-    Raises:
-    -------
+    Raises
+    ------
         AttributeError
             If passed invalid type of `astype` value.
+
+    See also
+    --------
+        random_size, columns_names_generator, random_series,
+        random_dataframe
     """
     # prepare astype parameter
     if not astype:
@@ -74,10 +81,9 @@ def random_narray(
 
 
 def random_size(n: int=None, low=0, high=100):
-    """
-    Generate random tuple of size parameter.
+    """Generate random tuple of size parameter.
 
-    Parameters:
+    Parameters
     ----------
         n : int, optional
             Length of output size tuple. If not given it generated
@@ -87,10 +93,15 @@ def random_size(n: int=None, low=0, high=100):
         high : int, optional
             Upper boundary of the length by one dimension.
 
-    Returns:
+    Returns
     -------
         size : tuple
             Randomly generated tuple.
+
+    See also
+    --------
+        random_narray, columns_names_generator, random_series,
+        random_dataframe
     """
     def randomint():
         return np.random.randint(low, high)
@@ -102,19 +113,21 @@ def random_size(n: int=None, low=0, high=100):
 
 
 def columns_names_generator(n_names):
-    """
-    Generate sequence of columns names.
+    """Generate sequence of columns names.
 
-    Parameters:
+    Parameters
     ----------
         n_names : int
             Number of names in sequence that should be generated.
 
-    Returns:
+    Returns
     -------
         name_sequence : list of strings
             Generated sequence of names.
 
+    See also
+    --------
+        random_narray, random_size, random_series, random_dataframe
     """
     r_length = ceil(log(n_names, len(ascii_uppercase)))
     return [
@@ -123,37 +136,59 @@ def columns_names_generator(n_names):
     ]
 
 
-def random_series(n: int = 1, dtype=int, p_missing: float=0):
+def random_series(
+        n: int = 1, dtype=int, p_missing: float=0,
+        astype=None, low: (int, float)=0, high: (int, float)=1,
+):
     """
     Generate random pandas Series with given length, type and
     percentage of corrupted data.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
         n : int, optional
             Length of Series.
         dtype : dtype, optional
             Desired dtype of the result.
         p_missing : float, optional
             Probability of missing data.
+        astype : dtype, optional
+            Desired dtype of the result.
+        low : float or int, optional
+            Lower boundary of the output interval.
+        high : float or int, optional
+            Upper boundary of the output interval.
 
-    Returns:
-    --------
+    Returns
+    -------
         out : pandas.Series
+
+    See also
+    --------
+        random_narray, random_size, columns_names_generator,
+        random_dataframe
     """
-    return pd.Series(
-        random_narray(size=n, dtype=dtype, p_missing=p_missing),
+    out = pd.Series(
+        random_narray(size=n, dtype=dtype, p_missing=p_missing,
+                      low=low, high=high),
         dtype=dtype
     )
+    if astype:
+        out = out.astype(astype)
+
+    return out
 
 
-def random_dataframe(rows: int=1, cols: int=1, dtype=int, p_missing: float=0):
+def random_dataframe(
+        rows: int=1, cols: int=1, dtype=int, p_missing: float=0,
+        astype=None, low: (int, float) = 0, high: (int, float) = 1,
+):
     """
     Generate random pandas DataFrame with given size of cols and rows,
     type and percentage of corrupted data.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
         rows : int, optional
             Number of rows
         cols : int, optional
@@ -162,13 +197,29 @@ def random_dataframe(rows: int=1, cols: int=1, dtype=int, p_missing: float=0):
             Desired dtype of the result.
         p_missing : float, optional
             Probability of missing data.
+        astype : dtype, optional
+            Desired dtype of the result.
+        low : float or int, optional
+            Lower boundary of the output interval.
+        high : float or int, optional
+            Upper boundary of the output interval.
 
-    Returns:
-    --------
+    Returns
+    -------
         out : pandas.DataFrame
+
+    See also
+    --------
+        random_narray, random_size, columns_names_generator,
+        random_series
     """
     size = (rows, cols, )
-    return pd.DataFrame(
-        random_narray(size=size, dtype=dtype, p_missing=p_missing),
+    out = pd.DataFrame(
+        random_narray(size=size, dtype=dtype, p_missing=p_missing,
+                      low=low, high=high),
         columns=columns_names_generator(cols)
     )
+    if astype:
+        out = out.astype(astype)
+
+    return out

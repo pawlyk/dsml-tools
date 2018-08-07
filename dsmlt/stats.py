@@ -5,17 +5,17 @@ __all__ = ('trimean', )
 
 
 def trimean(data):
-    """
-    Compute the trimean value of the data.
+    """Compute the trimean value of the data.
 
     Returns the trimean value of the array elements.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
         data : array_like
                Input array or object that can be converted to an array.
-    Returns:
-    --------
+
+    Returns
+    -------
         trimean : A calculated trimean value.
 
     .. _Trimean:

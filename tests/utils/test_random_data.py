@@ -175,6 +175,20 @@ def test_random_series():
     assert data.dtype.type == np.float64
     assert np.sum(data.isna()) > 0
 
+    # test asytype int
+    data = utils.random_series(100, dtype=np.int8, astype=np.int64)
+    assert data.dtype.type == np.int64
+
+    data = utils.random_series(100, dtype=np.int64, astype=np.int8)
+    assert data.dtype.type == np.int8
+
+    # test asytype float
+    data = utils.random_series(100, dtype=np.float, astype=np.float16)
+    assert data.dtype.type == np.float16
+
+    data = utils.random_series(100, dtype=np.float16, astype=np.float128)
+    assert data.dtype.type == np.float128
+
 
 def test_random_dataframe():
     data = utils.random_dataframe()
@@ -199,12 +213,30 @@ def test_random_dataframe():
     for item_type in data.dtypes.values:
         assert item_type == np.float64
 
-    data = utils.random_dataframe(2, 3, p_missing=0.5)
+    data = utils.random_dataframe(3, 4, p_missing=0.5)
     assert isinstance(data, pd.DataFrame)
-    assert data.shape == (2, 3, )
+    assert data.shape == (3, 4, )
     assert data.isna().values.sum() >= 1
 
-    data = utils.random_dataframe(2, 3, dtype=float, p_missing=0.5)
+    data = utils.random_dataframe(3, 4, dtype=float, p_missing=0.5)
     assert isinstance(data, pd.DataFrame)
-    assert data.shape == (2, 3, )
+    assert data.shape == (3, 4, )
     assert data.isna().values.sum() >= 1
+
+    # test asytype int
+    data = utils.random_dataframe(3, 4, dtype=np.int8, astype=np.int64)
+    for item_type in data.dtypes.values:
+        assert item_type == np.int64
+
+    data = utils.random_dataframe(3, 4, dtype=np.int64, astype=np.int8)
+    for item_type in data.dtypes.values:
+        assert item_type == np.int8
+
+    # test asytype float
+    data = utils.random_dataframe(3, 4, dtype=np.float, astype=np.float16)
+    for item_type in data.dtypes.values:
+        assert item_type == np.float16
+
+    data = utils.random_dataframe(3, 4, dtype=np.float16, astype=np.float128)
+    for item_type in data.dtypes.values:
+        assert item_type == np.float128
