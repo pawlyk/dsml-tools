@@ -260,7 +260,7 @@ class TestMemoryOptimisation:
         data['E'] = data['A'].astype('category')
         optimiser = MemoryOptimiser(mode='auto')
         optimiser.fit(data)
-        assert list(optimiser.data_types_.values())[-1] == 'category'
+        assert optimiser.data_types_.get('E') == 'category'
         assert list(optimiser.data_types_.values())[0] == np.int8
 
         data = optimiser.transform(data)
@@ -273,7 +273,7 @@ class TestMemoryOptimisation:
         data['E'] = data['A'].astype('category')
         optimiser = MemoryOptimiser(mode='convert')
         optimiser.fit(data)
-        assert list(optimiser.data_types_.values())[-1] == 'category'
+        assert optimiser.data_types_.get('E') == 'category'
         assert list(optimiser.data_types_.values())[0] == np.int8
 
         data = optimiser.transform(data)
@@ -285,7 +285,7 @@ class TestMemoryOptimisation:
         data['E'] = pd.Series(['a', 'b', 'c']).astype('category')
         optimiser = MemoryOptimiser(mode='convert')
         optimiser.fit(data)
-        assert list(optimiser.data_types_.values())[-1] == 'category'
+        assert optimiser.data_types_.get('E') == 'category'
         assert list(optimiser.data_types_.values())[0] == np.int8
 
         data = optimiser.transform(data)
