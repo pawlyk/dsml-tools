@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from pandas.api.types import CategoricalDtype
 from sklearn.base import BaseEstimator, TransformerMixin
 
 from ...constants import NUMERICS, INTEGERS_RANGES, FLOATS_RANGES
@@ -102,7 +103,10 @@ class MemoryOptimiser(BaseEstimator, TransformerMixin):
         origin_type = data.dtype
         dtype = origin_type
 
-        if origin_type != object:
+        if isinstance(origin_type, CategoricalDtype):
+            dtype = 'category'
+
+        elif origin_type != object:
             data_min = data.min()
             data_max = data.max()
             convert = False
@@ -121,9 +125,6 @@ class MemoryOptimiser(BaseEstimator, TransformerMixin):
                 for nptype, (range_min, range_max) in FLOATS_RANGES.items():
                     if data_min > range_min and data_max < range_max:
                         dtype = nptype
-
-        else:
-            dtype = 'category'
 
         return dtype
 

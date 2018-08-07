@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import pytest
 
 from dsmlt.preprocessing import MemoryOptimiser
@@ -251,3 +252,41 @@ class TestMemoryOptimisation:
         data = optimiser.transform(data)
         for item_type in data.dtypes.values:
             assert item_type == np.int8
+
+        # test mode auto for int with categorical
+        data = random_dataframe(
+            3, 4, low=0, high=100, dtype=np.int8, astype=np.int64
+        )
+        data['E'] = data['A'].astype('category')
+        optimiser = MemoryOptimiser(mode='auto')
+        optimiser.fit(data)
+        assert list(optimiser.data_types_.values())[-1] == 'category'
+        assert list(optimiser.data_types_.values())[0] == np.int8
+
+        data = optimiser.transform(data)
+        assert data.dtypes.values[-1] == 'category'
+
+        # test mode convert for int with categorical
+        data = random_dataframe(
+            3, 4, low=0, high=100, dtype=np.int8, astype=np.int64
+        )
+        data['E'] = data['A'].astype('category')
+        optimiser = MemoryOptimiser(mode='convert')
+        optimiser.fit(data)
+        assert list(optimiser.data_types_.values())[-1] == 'category'
+        assert list(optimiser.data_types_.values())[0] == np.int8
+
+        data = optimiser.transform(data)
+        assert data.dtypes.values[-1] == 'category'
+
+        data = random_dataframe(
+            3, 4, low=0, high=100, dtype=np.int8, astype=np.int64
+        )
+        data['E'] = pd.Series(['a', 'b', 'c']).astype('category')
+        optimiser = MemoryOptimiser(mode='convert')
+        optimiser.fit(data)
+        assert list(optimiser.data_types_.values())[-1] == 'category'
+        assert list(optimiser.data_types_.values())[0] == np.int8
+
+        data = optimiser.transform(data)
+        assert data.dtypes.values[-1] == 'category'
