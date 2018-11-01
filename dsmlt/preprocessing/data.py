@@ -30,12 +30,12 @@ class DataMapper:
     Data mapper that handle bulk map of data.
     """
 
-    def __init__(self, scaling: (dict, str)=None, inplace: bool=False):
+    def __init__(self, scaling: (dict, str) = None, inplace: bool = False):
         # TODO use scaling parameter in mapper
         self.scaling = scaling
         self.inplace = inplace
 
-    def _get_new_data(self, data, empty_column: str=None):
+    def _get_new_data(self, data, empty_column: str = None):
         """Prepare output data.
 
         Parameters

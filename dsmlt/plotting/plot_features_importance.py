@@ -13,9 +13,9 @@ __all__ = ('plot_features_importance', )
 
 
 def plot_features_importance(*estimators: (list, tuple, np.ndarray),
-                             features_names: Sequence[str]=None,
-                             method: str=None, reverse=False,
-                             threshold: float=None, ax=None,
+                             features_names: Sequence[str] = None,
+                             method: str = None, reverse=False,
+                             threshold: float = None, ax=None,
                              **kwargs) -> Sequence:
     """
     Build, plot and return features importance.

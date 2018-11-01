@@ -15,7 +15,7 @@ def single_missing(points,
     ----------
         points : numpy array, pandas Series, pandas DataFrame
             An numobservations by numdimensions array of observations.
-        missing_value : int, float, str
+        single_missing_value : int, float, str
             A single value that we accept as indicator of missing value.
 
     Returns
@@ -44,7 +44,7 @@ def single_missing(points,
         )
 
 
-def missing(points, missing_value: (int, float, str, list, tuple)=np.NAN):
+def missing(points, missing_value: (int, float, str, list, tuple) = np.NAN):
     """
     Returns a boolean array with True if points have missing and False
     otherwise.
@@ -89,7 +89,7 @@ def missing(points, missing_value: (int, float, str, list, tuple)=np.NAN):
 
 
 def missing_count(points,
-                  missing_value: (int, float, str, list, tuple)=np.NAN):
+                  missing_value: (int, float, str, list, tuple) = np.NAN):
     """
     Returns a count of missing values.
 
