@@ -1,10 +1,10 @@
-pytest==4.1.1
+pytest==4.2.0
 pytest-cov==2.6.1
-flake8==3.6.0
-Cython==0.29.3
-numpy==1.16.0
+flake8==3.7.5
+Cython==0.29.4
+numpy==1.16.1
 scipy==1.2.0
 matplotlib==3.0.2
-pandas==0.24.0
+pandas==0.24.1
 scikit-learn==0.20.2
 #seaborn
