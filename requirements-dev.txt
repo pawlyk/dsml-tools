@@ -1,6 +1,6 @@
 pytest==4.3.0
 pytest-cov==2.6.1
-flake8==3.7.5
+flake8==3.7.7
 Cython==0.29.5
 numpy==1.16.1
 scipy==1.2.1
