@@ -9,10 +9,11 @@ __all__ = ('plot_distribution', )
 
 
 def plot_distribution(data: (list, np.array, np.ndarray), bins_number=10,
-                      outliers_index: (list, tuple, np.array)=None,
-                      show_outliers: bool=False, outliers_ticks: bool=False,
-                      show_box: bool=True, showmeans: bool=True,
-                      notch: bool=False, sym: bool=False):
+                      outliers_index: (list, tuple, np.array) = None,
+                      show_outliers: bool = False,
+                      outliers_ticks: bool = False,
+                      show_box: bool = True, showmeans: bool = True,
+                      notch: bool = False, sym: bool = False):
     """
     Plot data distribution along with its box.
     Parameters:

@@ -39,8 +39,8 @@ def join_indexes(index1, index2, operation: str):
 
 
 def join_indexes_dataframe(index: pd.DataFrame, operation: str,
-                           columns: (List[str], Tuple[str])=None,
-                           inverse: bool=False):
+                           columns: (List[str], Tuple[str]) = None,
+                           inverse: bool = False):
     """
     Join two indexes columns from `index` by columns `columns` using operator
     given by `operation`.

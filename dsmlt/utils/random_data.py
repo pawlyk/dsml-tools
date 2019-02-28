@@ -15,8 +15,8 @@ __all__ = (
 
 
 def random_narray(
-        size: (list, tuple), dtype=int, p_missing: float=0,
-        astype=None, low: (int, float)=0, high: (int, float)=1,
+        size: (list, tuple), dtype=int, p_missing: float = 0,
+        astype=None, low: (int, float) = 0, high: (int, float) = 1,
 ):
     """
     Generate random n-dimensional array with given type, size and
@@ -80,7 +80,7 @@ def random_narray(
     return out
 
 
-def random_size(n: int=None, low=0, high=100):
+def random_size(n: int = None, low=0, high=100):
     """Generate random tuple of size parameter.
 
     Parameters
@@ -137,8 +137,8 @@ def columns_names_generator(n_names):
 
 
 def random_series(
-        n: int = 1, dtype=int, p_missing: float=0,
-        astype=None, low: (int, float)=0, high: (int, float)=1,
+        n: int = 1, dtype=int, p_missing: float = 0,
+        astype=None, low: (int, float) = 0, high: (int, float) = 1,
 ):
     """
     Generate random pandas Series with given length, type and
@@ -180,7 +180,7 @@ def random_series(
 
 
 def random_dataframe(
-        rows: int=1, cols: int=1, dtype=int, p_missing: float=0,
+        rows: int = 1, cols: int = 1, dtype=int, p_missing: float = 0,
         astype=None, low: (int, float) = 0, high: (int, float) = 1,
 ):
     """
