@@ -8,12 +8,12 @@ import pandas as pd
 import numpy as np
 
 
-__all__ = ('join_indexes', 'join_indexes_dataframe', )
+__all__ = ('join_indices', 'join_indices_dataframe', )
 
 
-def join_indexes(index1, index2, operation: str):
+def join_indices(index1, index2, operation: str):
     """
-    Join two indexes `index1` and `index2` using operator given by `operation`.
+    Join two indices `index1` and `index2` using operator given by `operation`.
 
     Parameters
     ----------
@@ -26,23 +26,23 @@ def join_indexes(index1, index2, operation: str):
         mask : A numobservations-length boolean array.
     """
     if not np.issubsctype(index1, bool):
-        raise AttributeError('Invalid type of index1')
+        raise AttributeError('Invalid type of index1.')
     if not np.issubsctype(index2, bool):
-        raise AttributeError('Invalid type of index2')
+        raise AttributeError('Invalid type of index2.')
     if operation not in ('and', 'or', ):
         raise AttributeError(
-            'Invalid value `{}` of operation attribute'.format(operation)
+            'Invalid value `{}` of operation attribute.'.format(operation)
         )
     operation = operator.and_ if operation == 'and' else operator.or_
 
     return operation(index1, index2)
 
 
-def join_indexes_dataframe(index: pd.DataFrame, operation: str,
+def join_indices_dataframe(index: pd.DataFrame, operation: str,
                            columns: (List[str], Tuple[str]) = None,
                            inverse: bool = False):
     """
-    Join two indexes columns from `index` by columns `columns` using operator
+    Join two indices columns from `index` by columns `columns` using operator
     given by `operation`.
 
     Parameters
@@ -61,7 +61,7 @@ def join_indexes_dataframe(index: pd.DataFrame, operation: str,
         return ~serie if inverse else serie
     if operation not in ('and', 'or'):
         raise AttributeError(
-            'Invalid value `{}` of operation attribute'.format(operation)
+            'Invalid value `{}` of operation attribute.'.format(operation)
         )
     operation = operator.and_ if operation == 'and' else operator.or_
     if not columns:
