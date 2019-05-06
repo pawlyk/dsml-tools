@@ -1,5 +1,5 @@
 pytest==4.4.1
-pytest-cov==2.6.1
+pytest-cov==2.7.1
 flake8==3.7.7
 Cython==0.29.7
 numpy==1.16.3
