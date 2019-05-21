@@ -3,12 +3,14 @@ sudo: required
 
 matrix:
   include:
-    - python: 3.6    
-    - python: 3.7-dev
-    - python: 3.8-dev
+    - python: "3.6"
     - python: 3.7
       dist: xenial
       sudo: true
+    - python: 3.8-dev
+      dist: xenial
+      sudo: true
+    - python: "pypy3"
 
 install:
   - pip install --upgrade setuptools
