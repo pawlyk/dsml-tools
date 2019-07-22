@@ -1,4 +1,4 @@
-pytest==5.0.0
+pytest==5.0.1
 pytest-cov==2.7.1
 flake8==3.7.7
 Cython==0.29.11
