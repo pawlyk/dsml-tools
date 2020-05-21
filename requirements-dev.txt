@@ -1,7 +1,7 @@
 pytest==5.4.2
 pytest-cov==2.8.1
 flake8==3.8.1
-Cython==0.29.18
+Cython==0.29.19
 numpy==1.18.4
 scipy==1.4.1
 matplotlib==3.2.1
