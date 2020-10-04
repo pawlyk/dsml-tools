@@ -1,22 +1,26 @@
-from itertools import zip_longest
 import types
+
+from itertools import zip_longest
 from typing import Sequence
 
 import matplotlib.pyplot as plt
-
 import numpy as np
 
 from sklearn.base import BaseEstimator
 
 
-__all__ = ('plot_features_importance', )
+__all__ = ("plot_features_importance",)
 
 
-def plot_features_importance(*estimators: (list, tuple, np.ndarray),
-                             features_names: Sequence[str] = None,
-                             method: str = None, reverse=False,
-                             threshold: float = None, ax=None,
-                             **kwargs) -> Sequence:
+def plot_features_importance(
+    *estimators: (list, tuple, np.ndarray),
+    features_names: Sequence[str] = None,
+    method: str = None,
+    reverse=False,
+    threshold: float = None,
+    ax=None,
+    **kwargs,
+) -> Sequence:
     """
     Build, plot and return features importance.
     Parameters:
@@ -38,19 +42,20 @@ def plot_features_importance(*estimators: (list, tuple, np.ndarray),
     """
 
     # check and get importance from estimators
-    if isinstance(estimators, tuple) and \
-            all(isinstance(_, (tuple, list, np.ndarray, BaseEstimator))
-                for _ in estimators):
+    if isinstance(estimators, tuple) and all(
+        isinstance(_, (tuple, list, np.ndarray, BaseEstimator))
+        for _ in estimators
+    ):
         importances = list()
         for estimator in estimators:
-            if hasattr(estimator, 'feature_importances_'):
+            if hasattr(estimator, "feature_importances_"):
                 importances.append(estimator.feature_importances_)
             else:
                 importances.append(estimator)
     else:
         raise AttributeError(
-            'Invalid parameter type or it does not have '
-            '`feature_importances_` parameter.'
+            "Invalid parameter type or it does not have "
+            "`feature_importances_` parameter."
         )
 
     # select appropriate method, order and threshold
@@ -59,7 +64,7 @@ def plot_features_importance(*estimators: (list, tuple, np.ndarray),
 
     if not isinstance(method, types.FunctionType):
         raise AttributeError(
-            'Invalid method `{}`. Should be valid called object.'.format(
+            "Invalid method `{}`. Should be valid called object.".format(
                 str(method)
             )
         )
@@ -78,19 +83,19 @@ def plot_features_importance(*estimators: (list, tuple, np.ndarray),
     )
 
     # plot results
-    title = kwargs.get('title')
+    title = kwargs.get("title")
     if not title:
-        title = 'Feature importance'
-    xlabel = kwargs.get('xlabel')
+        title = "Feature importance"
+    xlabel = kwargs.get("xlabel")
     if not xlabel:
-        xlabel = 'F score'
-    ylabel = kwargs.get('ylabel')
+        xlabel = "F score"
+    ylabel = kwargs.get("ylabel")
     if not ylabel:
-        ylabel = 'Features'
-    grid = kwargs.get('grid')
+        ylabel = "Features"
+    grid = kwargs.get("grid")
     if not grid:
         grid = True
-    legend = kwargs.get('legend')
+    legend = kwargs.get("legend")
     legends = [_.__class__.__name__ for _ in estimators]
 
     if not legend or (isinstance(legend, bool) and legend is False):
@@ -101,7 +106,7 @@ def plot_features_importance(*estimators: (list, tuple, np.ndarray),
         if isinstance(legend, (list, tuple)):
             if len(estimators) != len(legend):
                 raise AttributeError(
-                    'Invalid length of `legend` - {}, should be {}'.format(
+                    "Invalid length of `legend` - {}, should be {}".format(
                         len(legend), len(estimators)
                     )
                 )
@@ -109,7 +114,7 @@ def plot_features_importance(*estimators: (list, tuple, np.ndarray),
                 legends = legend
         else:
             raise AttributeError(
-                'Invalid type of `legend` - {}'.format(type(legend))
+                "Invalid type of `legend` - {}".format(type(legend))
             )
 
     values, labels = zip(*importances)
@@ -123,22 +128,21 @@ def plot_features_importance(*estimators: (list, tuple, np.ndarray),
     ylocs = np.arange(
         start=len(values) * (len(estimators) + width * 2) * width,
         stop=0,
-        step=-(len(estimators) + width * 2) * width
+        step=-(len(estimators) + width * 2) * width,
     )
 
     for item, label in zip(zip(*values), legends):
-        ax.barh(
-            ylocs, item, width, align='center', label=label
-        )
+        ax.barh(ylocs, item, width, align="center", label=label)
         ylocs = ylocs + width
 
     ax.set(
-        yticks=ylocs + len(estimators) * width, yticklabels=labels,
+        yticks=ylocs + len(estimators) * width,
+        yticklabels=labels,
         ylim=[
             2 * width,
-            len(values) * (len(estimators) + width * 2) * width +
-            width * len(estimators)
-        ]
+            len(values) * (len(estimators) + width * 2) * width
+            + width * len(estimators),
+        ],
     )
 
     # for x, y in zip(values, ylocs):
@@ -149,7 +153,7 @@ def plot_features_importance(*estimators: (list, tuple, np.ndarray),
 
     xlim = (
         min([item for sublist in values for item in sublist]),
-        max([item for sublist in values for item in sublist]) * 1.1
+        max([item for sublist in values for item in sublist]) * 1.1,
     )
     ax.set_xlim(xlim)
 

@@ -4,11 +4,17 @@ Helper function for detect missing values
 import numpy as np
 import pandas as pd
 
-__all__ = ('missing', 'missing_count', 'single_missing', )
+
+__all__ = (
+    "missing",
+    "missing_count",
+    "single_missing",
+)
 
 
-def single_missing(points,
-                   single_missing_value: (int, float, str, None.__class__)):
+def single_missing(
+    points, single_missing_value: (int, float, str, None.__class__)
+):
     """Function that realize check on missing of given value.
 
     Parameters
@@ -38,7 +44,7 @@ def single_missing(points,
 
     else:
         raise AttributeError(
-            'Passed value `points` with invalid type - {}.'.format(
+            "Passed value `points` with invalid type - {}.".format(
                 type(points)
             )
         )
@@ -75,21 +81,25 @@ def missing(points, missing_value: (int, float, str, list, tuple) = np.NAN):
             result |= result_second
         return result
 
-    elif isinstance(missing_value, (int, float, str)) or \
-            missing_value is np.NAN or missing_value is None:
+    elif (
+        isinstance(missing_value, (int, float, str))
+        or missing_value is np.NAN
+        or missing_value is None
+    ):
         result = single_missing(points, missing_value)
         return result
 
     else:
         raise AttributeError(
-            'Passed value `missing_value` with invalid type - {}.'.format(
+            "Passed value `missing_value` with invalid type - {}.".format(
                 type(missing_value)
             )
         )
 
 
-def missing_count(points,
-                  missing_value: (int, float, str, list, tuple) = np.NAN):
+def missing_count(
+    points, missing_value: (int, float, str, list, tuple) = np.NAN
+):
     """
     Returns a count of missing values.
 
@@ -120,7 +130,7 @@ def missing_count(points,
 
     else:
         raise AttributeError(
-            'Passed value `points` with invalid type - {}.'.format(
+            "Passed value `points` with invalid type - {}.".format(
                 type(points)
             )
         )

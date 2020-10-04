@@ -4,20 +4,21 @@ import pytest
 
 from dsmlt.preprocessing import MemoryOptimiser
 from dsmlt.utils.random_data import (
-    random_narray, random_series, random_dataframe,
+    random_narray,
+    random_series,
+    random_dataframe,
 )
 
 
 class TestMemoryOptimisation:
-
     def test_init_optimiser(self):
         optimiser = MemoryOptimiser()
-        assert optimiser.mode == 'auto'
+        assert optimiser.mode == "auto"
         assert optimiser.axis == 0
         assert optimiser.copy is True
 
-        optimiser = MemoryOptimiser(mode='convert', axis=3, copy=False)
-        assert optimiser.mode == 'convert'
+        optimiser = MemoryOptimiser(mode="convert", axis=3, copy=False)
+        assert optimiser.mode == "convert"
         assert optimiser.axis == 3
         assert optimiser.copy is False
 
@@ -35,30 +36,32 @@ class TestMemoryOptimisation:
 
     def test_wrong_init_optimiser(self):
         with pytest.raises(AttributeError) as exc:
-            MemoryOptimiser(mode='random')
-        assert str(exc.value) == 'Passed invalid value of `mode` - `random`.'
+            MemoryOptimiser(mode="random")
+        assert str(exc.value) == "Passed invalid value of `mode` - `random`."
 
         with pytest.raises(AttributeError) as exc:
             MemoryOptimiser(mode=set)
-        assert str(exc.value) == \
-            "Passed invalid value of `mode` - `<class 'set'>`."
+        assert (
+            str(exc.value)
+            == "Passed invalid value of `mode` - `<class 'set'>`."
+        )
 
         with pytest.raises(NotImplementedError) as exc:
-            MemoryOptimiser(mode=[int, np.int8, np.float128, ])
-        assert str(exc.value) == 'Not implemented yet.'
+            MemoryOptimiser(mode=[int, np.int8, np.float128])
+        assert str(exc.value) == "Not implemented yet."
 
         with pytest.raises(NotImplementedError) as exc:
-            MemoryOptimiser(mode={'a': int, 'b': np.int8, 'c': np.float16, })
-        assert str(exc.value) == 'Not implemented yet.'
+            MemoryOptimiser(mode={"a": int, "b": np.int8, "c": np.float16})
+        assert str(exc.value) == "Not implemented yet."
 
     def test_reset_optimiser(self):
         data = random_narray((2, 3, 4), astype=np.int64)
         optimiser = MemoryOptimiser(mode=np.int8)
         optimiser.fit(data)
-        assert hasattr(optimiser, 'data_types_')
+        assert hasattr(optimiser, "data_types_")
 
         optimiser._reset()
-        assert not hasattr(optimiser, 'data_types_')
+        assert not hasattr(optimiser, "data_types_")
 
     def test_simple_numpy_ndarray(self):
         # test mode int
@@ -126,7 +129,7 @@ class TestMemoryOptimisation:
         data = random_narray(
             (2, 3, 4), low=0, high=100, dtype=np.int8, astype=np.int64
         )
-        optimiser = MemoryOptimiser(mode='auto')
+        optimiser = MemoryOptimiser(mode="auto")
         optimiser.fit(data)
         assert optimiser.data_types_ == np.int8
 
@@ -135,7 +138,7 @@ class TestMemoryOptimisation:
 
         # test mode auto for float
         data = random_narray((2, 3, 4), dtype=np.float16, astype=np.float64)
-        optimiser = MemoryOptimiser(mode='auto')
+        optimiser = MemoryOptimiser(mode="auto")
         optimiser.fit(data)
         assert optimiser.data_types_ == np.float16
 
@@ -146,7 +149,7 @@ class TestMemoryOptimisation:
         data = random_narray(
             (2, 3, 4), low=0, high=100, dtype=np.int8, astype=np.int64
         )
-        optimiser = MemoryOptimiser(mode='convert')
+        optimiser = MemoryOptimiser(mode="convert")
         optimiser.fit(data)
         assert optimiser.data_types_ == np.int8
 
@@ -157,7 +160,7 @@ class TestMemoryOptimisation:
         data = random_narray(
             (2, 3, 4), low=0, high=100, dtype=np.int8, astype=np.int64
         )
-        optimiser = MemoryOptimiser(mode='convert')
+        optimiser = MemoryOptimiser(mode="convert")
         optimiser.fit(data)
         assert optimiser.data_types_ == np.int8
 
@@ -169,7 +172,7 @@ class TestMemoryOptimisation:
         data = random_series(
             100, low=0, high=100, dtype=np.int8, astype=np.int64
         )
-        optimiser = MemoryOptimiser(mode='auto')
+        optimiser = MemoryOptimiser(mode="auto")
         optimiser.fit(data)
         assert optimiser.data_types_ == np.int8
 
@@ -178,7 +181,7 @@ class TestMemoryOptimisation:
 
         # test mode auto for float
         data = random_series(100, dtype=np.float16, astype=np.float64)
-        optimiser = MemoryOptimiser(mode='auto')
+        optimiser = MemoryOptimiser(mode="auto")
         optimiser.fit(data)
         assert optimiser.data_types_ == np.float16
 
@@ -189,7 +192,7 @@ class TestMemoryOptimisation:
         data = random_series(
             100, low=0, high=100, dtype=np.int8, astype=np.int64
         )
-        optimiser = MemoryOptimiser(mode='convert')
+        optimiser = MemoryOptimiser(mode="convert")
         optimiser.fit(data)
 
         data = optimiser.transform(data)
@@ -199,7 +202,7 @@ class TestMemoryOptimisation:
         data = random_series(
             100, low=0, high=100, dtype=np.int8, astype=np.float64
         )
-        optimiser = MemoryOptimiser(mode='convert')
+        optimiser = MemoryOptimiser(mode="convert")
         optimiser.fit(data)
         assert optimiser.data_types_ == np.int8
 
@@ -211,7 +214,7 @@ class TestMemoryOptimisation:
         data = random_dataframe(
             3, 4, low=0, high=100, dtype=np.int8, astype=np.int64
         )
-        optimiser = MemoryOptimiser(mode='auto')
+        optimiser = MemoryOptimiser(mode="auto")
         optimiser.fit(data)
         assert list(optimiser.data_types_.values())[0] == np.int8
 
@@ -221,7 +224,7 @@ class TestMemoryOptimisation:
 
         # test mode auto for float
         data = random_dataframe(3, 4, dtype=np.float16, astype=np.float64)
-        optimiser = MemoryOptimiser(mode='auto')
+        optimiser = MemoryOptimiser(mode="auto")
         optimiser.fit(data)
         assert list(optimiser.data_types_.values())[0] == np.float16
 
@@ -233,7 +236,7 @@ class TestMemoryOptimisation:
         data = random_dataframe(
             3, 4, low=0, high=100, dtype=np.int8, astype=np.int64
         )
-        optimiser = MemoryOptimiser(mode='convert')
+        optimiser = MemoryOptimiser(mode="convert")
         optimiser.fit(data)
         assert list(optimiser.data_types_.values())[0] == np.int8
 
@@ -245,7 +248,7 @@ class TestMemoryOptimisation:
         data = random_dataframe(
             3, 4, low=0, high=100, dtype=np.int8, astype=np.float64
         )
-        optimiser = MemoryOptimiser(mode='convert')
+        optimiser = MemoryOptimiser(mode="convert")
         optimiser.fit(data)
         assert list(optimiser.data_types_.values())[0] == np.int8
 
@@ -257,36 +260,36 @@ class TestMemoryOptimisation:
         data = random_dataframe(
             3, 4, low=0, high=100, dtype=np.int8, astype=np.int64
         )
-        data['E'] = data['A'].astype('category')
-        optimiser = MemoryOptimiser(mode='auto')
+        data["E"] = data["A"].astype("category")
+        optimiser = MemoryOptimiser(mode="auto")
         optimiser.fit(data)
-        assert optimiser.data_types_.get('E') == 'category'
-        assert optimiser.data_types_.get('A') == np.int8
+        assert optimiser.data_types_.get("E") == "category"
+        assert optimiser.data_types_.get("A") == np.int8
 
         data = optimiser.transform(data)
-        assert data.dtypes.values[-1] == 'category'
+        assert data.dtypes.values[-1] == "category"
 
         # test mode convert for int with categorical
         data = random_dataframe(
             3, 4, low=0, high=100, dtype=np.int8, astype=np.int64
         )
-        data['E'] = data['A'].astype('category')
-        optimiser = MemoryOptimiser(mode='convert')
+        data["E"] = data["A"].astype("category")
+        optimiser = MemoryOptimiser(mode="convert")
         optimiser.fit(data)
-        assert optimiser.data_types_.get('E') == 'category'
-        assert optimiser.data_types_.get('A') == np.int8
+        assert optimiser.data_types_.get("E") == "category"
+        assert optimiser.data_types_.get("A") == np.int8
 
         data = optimiser.transform(data)
-        assert data.dtypes.values[-1] == 'category'
+        assert data.dtypes.values[-1] == "category"
 
         data = random_dataframe(
             3, 4, low=0, high=100, dtype=np.int8, astype=np.int64
         )
-        data['E'] = pd.Series(['a', 'b', 'c']).astype('category')
-        optimiser = MemoryOptimiser(mode='convert')
+        data["E"] = pd.Series(["a", "b", "c"]).astype("category")
+        optimiser = MemoryOptimiser(mode="convert")
         optimiser.fit(data)
-        assert optimiser.data_types_.get('E') == 'category'
-        assert optimiser.data_types_.get('A') == np.int8
+        assert optimiser.data_types_.get("E") == "category"
+        assert optimiser.data_types_.get("A") == np.int8
 
         data = optimiser.transform(data)
-        assert data.dtypes.values[-1] == 'category'
+        assert data.dtypes.values[-1] == "category"

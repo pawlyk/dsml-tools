@@ -8,10 +8,23 @@ FLAGS=
 PROJECT := dsmlt
 LOCALPATH := $(CURDIR)/$(PROJECT)
 
-# Export targets not associated with files
-.PHONY: clean flake test vtest cov  cov-report checkrst install setup
+# Default targets
+.DEFAULT: clean lint install setup cov-report
+
+# Install all packages need for development
+.PHONY: install
+install:
+	pip install -r requirements.txt
+	pip install -r requirements-dev.txt
+	pip install -Ue .
+
+# Setup the package from source
+.PHONY: setup
+setup:
+	python setup.py install
 
 # Clean build files
+.PHONY: clean
 clean:
 	rm -rf `find . -name __pycache__`
 	rm -f `find . -type f -name '*.py[co]' `
@@ -33,35 +46,41 @@ clean:
 	rm -rf packages_$(PROJECT).png
 	rm -rf docs/_build
 
-# Check pep8 rules
-flake: checkrst
-	 flake8 dsmlt/ tests/
+# Format source code
+.PHONY: format
+format:
+	black .
+	autoflake -r --in-place \
+		--remove-unused-variables \
+		--remove-all-unused-imports \
+		--remove-duplicate-keys .
 
-# Targets for testing
-test: flake
-	py.test -s $(FLAGS) ./tests/
-
-# Targets for testing verbose
-vtest: flake
-	py.test -s -v $(FLAGS) ./tests/
-
-# Make tests with coverage
-cov cover coverage: flake checkrst
-	py.test -s -v --cov dsmlt $(FLAGS) ./tests
-
-# Make coverage report
-cov-report cover-report coverage-report: flake checkrst
-	py.test -s -v --cov-report term --cov-report html --cov dsmlt $(FLAGS) ./tests
-	@echo "open file://`pwd`/htmlcov/index.html"
-
+.PHONY:checkrst
 checkrst:
 	python setup.py check --restructuredtext
 
-# Install the package from source
-install:
-	python setup.py install
+# Check pep8 rules
+.PHONY: lint flake
+lint flake: checkrst
+	 flake8 --show-source dsmlt/ tests/
 
-# Setup packages need for development
-setup:
-	pip install -r requirements-dev.txt
-	pip install -Ue .
+# Targets for testing
+.PHONY: test
+test: lint
+	py.test -s $(FLAGS) ./tests/
+
+# Targets for testing verbose
+.PHONY: vtest
+vtest: lint
+	py.test -s -v $(FLAGS) ./tests/
+
+# Make tests with coverage
+.PHONY: cov cover coverage
+cov cover coverage: lint checkrst
+	py.test -s -v --cov dsmlt $(FLAGS) ./tests
+
+# Make coverage report
+.PHONY: cov-report cover-report coverage-report
+cov-report cover-report coverage-report: lint checkrst
+	py.test -s -v --cov-report term --cov-report html --cov dsmlt $(FLAGS) ./tests
+	@echo "open file://`pwd`/htmlcov/index.html"

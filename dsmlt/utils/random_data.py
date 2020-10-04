@@ -9,14 +9,21 @@ from ..constants import INTEGERS, FLOATS, NUMERICS
 
 
 __all__ = (
-    'random_narray', 'random_size', 'columns_names_generator',
-    'random_dataframe', 'random_series',
+    "random_narray",
+    "random_size",
+    "columns_names_generator",
+    "random_dataframe",
+    "random_series",
 )
 
 
 def random_narray(
-        size: (list, tuple), dtype=int, p_missing: float = 0,
-        astype=None, low: (int, float) = 0, high: (int, float) = 1,
+    size: (list, tuple),
+    dtype=int,
+    p_missing: float = 0,
+    astype=None,
+    low: (int, float) = 0,
+    high: (int, float) = 1,
 ):
     """
     Generate random n-dimensional array with given type, size and
@@ -60,13 +67,14 @@ def random_narray(
 
     if astype not in NUMERICS:
         raise AttributeError(
-            'Passed invalid value of `astype` - {}.'.format(astype)
+            "Passed invalid value of `astype` - {}.".format(astype)
         )
 
     # generate random data
     if dtype in INTEGERS:
         out = np.random.randint(
-            low=low, high=high, size=size, dtype=dtype).astype(astype)
+            low=low, high=high, size=size, dtype=dtype
+        ).astype(astype)
     elif dtype in FLOATS:
         out = np.random.uniform(low=low, high=high, size=size).astype(astype)
 
@@ -103,6 +111,7 @@ def random_size(n: int = None, low=0, high=100):
         random_narray, columns_names_generator, random_series,
         random_dataframe
     """
+
     def randomint():
         return np.random.randint(low, high)
 
@@ -131,14 +140,18 @@ def columns_names_generator(n_names):
     """
     r_length = ceil(log(n_names, len(ascii_uppercase)))
     return [
-        ''.join(_)
+        "".join(_)
         for _ in islice(permutations(ascii_uppercase, r_length), n_names)
     ]
 
 
 def random_series(
-        n: int = 1, dtype=int, p_missing: float = 0,
-        astype=None, low: (int, float) = 0, high: (int, float) = 1,
+    n: int = 1,
+    dtype=int,
+    p_missing: float = 0,
+    astype=None,
+    low: (int, float) = 0,
+    high: (int, float) = 1,
 ):
     """
     Generate random pandas Series with given length, type and
@@ -169,9 +182,10 @@ def random_series(
         random_dataframe
     """
     out = pd.Series(
-        random_narray(size=n, dtype=dtype, p_missing=p_missing,
-                      low=low, high=high),
-        dtype=dtype
+        random_narray(
+            size=n, dtype=dtype, p_missing=p_missing, low=low, high=high
+        ),
+        dtype=dtype,
     )
     if astype:
         out = out.astype(astype)
@@ -180,8 +194,13 @@ def random_series(
 
 
 def random_dataframe(
-        rows: int = 1, cols: int = 1, dtype=int, p_missing: float = 0,
-        astype=None, low: (int, float) = 0, high: (int, float) = 1,
+    rows: int = 1,
+    cols: int = 1,
+    dtype=int,
+    p_missing: float = 0,
+    astype=None,
+    low: (int, float) = 0,
+    high: (int, float) = 1,
 ):
     """
     Generate random pandas DataFrame with given size of cols and rows,
@@ -213,11 +232,15 @@ def random_dataframe(
         random_narray, random_size, columns_names_generator,
         random_series
     """
-    size = (rows, cols, )
+    size = (
+        rows,
+        cols,
+    )
     out = pd.DataFrame(
-        random_narray(size=size, dtype=dtype, p_missing=p_missing,
-                      low=low, high=high),
-        columns=columns_names_generator(cols)
+        random_narray(
+            size=size, dtype=dtype, p_missing=p_missing, low=low, high=high
+        ),
+        columns=columns_names_generator(cols),
     )
     if astype:
         out = out.astype(astype)

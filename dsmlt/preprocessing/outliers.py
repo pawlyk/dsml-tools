@@ -6,8 +6,10 @@ import pandas as pd
 
 
 __all__ = (
-    'mad_outlier', 'percentile_outlier',
-    'outlier', 'outlier_count',
+    "mad_outlier",
+    "percentile_outlier",
+    "outlier",
+    "outlier_count",
 )
 
 # TODO move part of this functionality into utils package.
@@ -64,7 +66,7 @@ def mad_outlier(points, thresh=3.5):
     if len(points.shape) == 1:
         points = points[:, None]
     median = np.median(points, axis=0)
-    diff = np.sum((points - median)**2, axis=-1)
+    diff = np.sum((points - median) ** 2, axis=-1)
     diff = np.sqrt(diff)
     med_abs_deviation = np.median(diff)
 
@@ -97,7 +99,7 @@ def percentile_outlier(points, threshold=95):
     return (points < minval) | (points > maxval)
 
 
-def outlier(points, method='mad', **kwargs):
+def outlier(points, method="mad", **kwargs):
     """
     Returns a boolean array with True if points are outliers and False
     otherwise. This function is wrapper on other specific function.
@@ -121,19 +123,19 @@ def outlier(points, method='mad', **kwargs):
     # if drop_na:
     #     points = points[~np.isnan(points)]
 
-    if method == 'mad':
+    if method == "mad":
         mask = mad_outlier(points, **kwargs)
-    elif method == 'percentile':
+    elif method == "percentile":
         mask = percentile_outlier(points, **kwargs)
     else:
         raise NotImplementedError(
-            'Passed method `%s` not implemented yet.' % method
+            "Passed method `%s` not implemented yet." % method
         )
 
     return mask
 
 
-def outlier_count(points, method='mad', **kwargs):
+def outlier_count(points, method="mad", **kwargs):
     """Returns a count of outliers values.
 
     Parameters
