@@ -46,6 +46,15 @@ clean:
 	rm -rf packages_$(PROJECT).png
 	rm -rf docs/_build
 
+# Format source code
+.PHONY: format
+format:
+	black .
+	autoflake -r --in-place \
+		--remove-unused-variables \
+		--remove-all-unused-imports \
+		--remove-duplicate-keys .
+
 .PHONY:checkrst
 checkrst:
 	python setup.py check --restructuredtext
@@ -53,7 +62,7 @@ checkrst:
 # Check pep8 rules
 .PHONY: lint flake
 lint flake: checkrst
-	 flake8 dsmlt/ tests/
+	 flake8 --show-source dsmlt/ tests/
 
 # Targets for testing
 .PHONY: test
