@@ -1,16 +1,15 @@
 language: python
-sudo: required
 
 matrix:
   include:
     - python: 3.6
     - python: 3.7
-      dist: xenial
-      sudo: true
+    - python: 3.8
 
 install:
   - pip install --upgrade setuptools
-  - pip install codecov
+  - pip install --upgrade pip
+  - pip install -r requirements.txt
   - pip install -r requirements-dev.txt
   - pip install -vv -Ue .
 
