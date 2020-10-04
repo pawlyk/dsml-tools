@@ -66,10 +66,7 @@ class MemoryOptimiser(BaseEstimator, TransformerMixin):
     """
 
     def __init__(self, mode="auto", axis=0, copy=True):
-        if isinstance(mode, str) and mode in {
-            "auto",
-            "convert",
-        }:
+        if isinstance(mode, str) and mode in {"auto", "convert"}:
             self.mode = mode
 
         elif isinstance(mode, (list, tuple, dict)):

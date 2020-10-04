@@ -47,23 +47,11 @@ class TestMemoryOptimisation:
         )
 
         with pytest.raises(NotImplementedError) as exc:
-            MemoryOptimiser(
-                mode=[
-                    int,
-                    np.int8,
-                    np.float128,
-                ]
-            )
+            MemoryOptimiser(mode=[int, np.int8, np.float128])
         assert str(exc.value) == "Not implemented yet."
 
         with pytest.raises(NotImplementedError) as exc:
-            MemoryOptimiser(
-                mode={
-                    "a": int,
-                    "b": np.int8,
-                    "c": np.float16,
-                }
-            )
+            MemoryOptimiser(mode={"a": int, "b": np.int8, "c": np.float16})
         assert str(exc.value) == "Not implemented yet."
 
     def test_reset_optimiser(self):

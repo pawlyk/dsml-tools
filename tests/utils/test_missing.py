@@ -22,15 +22,30 @@ class TestMissingFunction:
         assert result_ndarray.dtype.type == np.bool_
         assert result_ndarray.shape == size
 
-        data_ndarray = np.array([[1, 2, 3, 4, np.NAN], [5, 6, 7, 8, 9]])
+        data_ndarray = np.array(
+            [
+                [1, 2, 3, 4, np.NAN],
+                [5, 6, 7, 8, 9],
+            ]
+        )
         assert missing(data_ndarray).any()
 
         # Test on presence optional None value as missing
-        data_ndarray = np.array([[1, 2, 3, 4, None], [5, 6, 7, 8, 9]])
+        data_ndarray = np.array(
+            [
+                [1, 2, 3, 4, None],
+                [5, 6, 7, 8, 9],
+            ]
+        )
         assert missing(data_ndarray).any()
 
         # Test on presence optional 999 value as missing
-        data_ndarray = np.array([[1, 2, 3, 4, 999], [5, 6, 7, 8, 9]])
+        data_ndarray = np.array(
+            [
+                [1, 2, 3, 4, 999],
+                [5, 6, 7, 8, 9],
+            ]
+        )
         assert missing(data_ndarray, missing_value=999).any()
 
     def test_simple_pandas_series(self):
@@ -71,10 +86,7 @@ class TestMissingFunction:
         result_dataframe = missing(data_dataframe)
         for item_type in result_dataframe.dtypes.values:
             assert item_type == np.bool_
-        assert result_dataframe.shape == (
-            3,
-            4,
-        )
+        assert result_dataframe.shape == (3, 4)
         assert result_dataframe.size == 12
 
         data_dataframe = DataFrame(
@@ -156,15 +168,30 @@ class TestMissingCountFunction:
         data_ndarray = random_narray(size, p_missing=0.5)
         assert missing_count(data_ndarray) >= 1
 
-        data_ndarray = np.array([[1, 2, 3, 4, np.NAN], [5, 6, 7, 8, 9]])
+        data_ndarray = np.array(
+            [
+                [1, 2, 3, 4, np.NAN],
+                [5, 6, 7, 8, 9],
+            ]
+        )
         assert missing(data_ndarray).any()
 
         # Test on presence optional None value as missing
-        data_ndarray = np.array([[1, 2, 3, 4, None], [5, 6, 7, 8, 9]])
+        data_ndarray = np.array(
+            [
+                [1, 2, 3, 4, None],
+                [5, 6, 7, 8, 9],
+            ]
+        )
         assert missing(data_ndarray).any()
 
         # Test on presence optional 999 value as missing
-        data_ndarray = np.array([[1, 2, 3, 4, 999], [5, 6, 7, 8, 9]])
+        data_ndarray = np.array(
+            [
+                [1, 2, 3, 4, 999],
+                [5, 6, 7, 8, 9],
+            ]
+        )
         assert missing(data_ndarray, missing_value=999).any()
 
     def test_simple_pandas_series(self):

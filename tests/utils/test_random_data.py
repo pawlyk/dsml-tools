@@ -155,52 +155,24 @@ def test_random_narray():
 
     # test wrong type
     with pytest.raises(AttributeError) as exc:
-        utils.random_narray(
-            (
-                1,
-                2,
-                3,
-            ),
-            dtype=list,
-        )
+        utils.random_narray((1, 2, 3), dtype=list)
     assert (
         str(exc.value) == "Passed invalid value of `astype` - <class 'list'>."
     )
 
     with pytest.raises(AttributeError) as exc:
-        utils.random_narray(
-            (
-                1,
-                2,
-                3,
-            ),
-            dtype="wrong type",
-        )
+        utils.random_narray((1, 2, 3), dtype="wrong type")
     assert str(exc.value) == "Passed invalid value of `astype` - wrong type."
 
     # test wrong astype
     with pytest.raises(AttributeError) as exc:
-        utils.random_narray(
-            (
-                1,
-                2,
-                3,
-            ),
-            astype=list,
-        )
+        utils.random_narray((1, 2, 3), astype=list)
     assert (
         str(exc.value) == "Passed invalid value of `astype` - <class 'list'>."
     )
 
     with pytest.raises(AttributeError) as exc:
-        utils.random_narray(
-            (
-                1,
-                2,
-                3,
-            ),
-            astype="wrong type",
-        )
+        utils.random_narray((1, 2, 3), astype="wrong type")
     assert str(exc.value) == "Passed invalid value of `astype` - wrong type."
 
 
@@ -265,36 +237,24 @@ def test_random_dataframe():
 
     data = utils.random_dataframe(2, 3)
     assert isinstance(data, pd.DataFrame)
-    assert data.shape == (
-        2,
-        3,
-    )
+    assert data.shape == (2, 3)
     for item_type in data.dtypes.values:
         assert item_type == np.int64
 
     data = utils.random_dataframe(2, 3, dtype=float)
     assert isinstance(data, pd.DataFrame)
-    assert data.shape == (
-        2,
-        3,
-    )
+    assert data.shape == (2, 3)
     for item_type in data.dtypes.values:
         assert item_type == np.float64
 
     data = utils.random_dataframe(3, 4, p_missing=0.5)
     assert isinstance(data, pd.DataFrame)
-    assert data.shape == (
-        3,
-        4,
-    )
+    assert data.shape == (3, 4)
     assert data.isna().values.sum() >= 1
 
     data = utils.random_dataframe(3, 4, dtype=float, p_missing=0.5)
     assert isinstance(data, pd.DataFrame)
-    assert data.shape == (
-        3,
-        4,
-    )
+    assert data.shape == (3, 4)
     assert data.isna().values.sum() >= 1
 
     # test asytype int

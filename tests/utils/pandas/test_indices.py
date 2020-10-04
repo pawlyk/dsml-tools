@@ -64,22 +64,10 @@ class TestMissingFunction:
     def test_indices_dataframe(self):
         data_frame = DataFrame(
             [
-                [
-                    True,
-                    False,
-                ],
-                [
-                    False,
-                    True,
-                ],
-                [
-                    False,
-                    False,
-                ],
-                [
-                    True,
-                    True,
-                ],
+                [True, False],
+                [False, True],
+                [False, False],
+                [True, True],
             ]
         )
 
@@ -100,52 +88,26 @@ class TestMissingFunction:
     def test_indices_dataframe_with_columns(self):
         data_frame = DataFrame(
             [
-                [
-                    True,
-                    False,
-                    True,
-                ],
-                [
-                    False,
-                    True,
-                    False,
-                ],
-                [
-                    False,
-                    False,
-                    True,
-                ],
-                [
-                    True,
-                    True,
-                    False,
-                ],
+                [True, False, True],
+                [False, True, False],
+                [False, False, True],
+                [True, True, False],
             ],
-            columns=(
-                "A",
-                "B",
-                "C",
-            ),
+            columns=("A", "B", "C"),
         )
 
         assert Series([False, False, False, True]).equals(
             join_indices_dataframe(
                 data_frame,
                 operation="and",
-                columns=(
-                    "A",
-                    "B",
-                ),
+                columns=("A", "B"),
             )
         )
         assert Series([True, True, False, True]).equals(
             join_indices_dataframe(
                 data_frame,
                 operation="or",
-                columns=(
-                    "A",
-                    "B",
-                ),
+                columns=("A", "B"),
             )
         )
 
@@ -154,10 +116,7 @@ class TestMissingFunction:
                 data_frame,
                 operation="and",
                 inverse=True,
-                columns=(
-                    "A",
-                    "B",
-                ),
+                columns=("A", "B"),
             )
         )
         assert Series([True, True, True, False]).equals(
@@ -165,29 +124,17 @@ class TestMissingFunction:
                 data_frame,
                 operation="or",
                 inverse=True,
-                columns=(
-                    "A",
-                    "B",
-                ),
+                columns=("A", "B"),
             )
         )
 
     def test_indices_dataframe_wrong_operation(self):
         data_frame = DataFrame(
             [
-                [
-                    True,
-                    False,
-                ],
-                [
-                    False,
-                    True,
-                ],
+                [True, False],
+                [False, True],
                 [False, False],
-                [
-                    True,
-                    True,
-                ],
+                [True, True],
             ]
         )
 

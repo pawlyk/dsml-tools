@@ -33,10 +33,7 @@ def join_indices(index1, index2, operation: str):
         raise AttributeError("Invalid type of index1.")
     if not np.issubsctype(index2, bool):
         raise AttributeError("Invalid type of index2.")
-    if operation not in (
-        "and",
-        "or",
-    ):
+    if operation not in ("and", "or"):
         raise AttributeError(
             "Invalid value `{}` of operation attribute.".format(operation)
         )
