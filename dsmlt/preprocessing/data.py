@@ -1,19 +1,19 @@
 """
 Helper function to create maps for different types of variables
 """
-from collections import OrderedDict
 import copy
 
-import pandas as pd
+from collections import OrderedDict
 
+import pandas as pd
 import numpy as np
 
 
 __all__ = (
-    'DataMapper',
-    'from_boolean_to_integers_map',
-    'from_explanatory_to_integers',
-    'from_integers_to_boolean_map',
+    "DataMapper",
+    "from_boolean_to_integers_map",
+    "from_explanatory_to_integers",
+    "from_integers_to_boolean_map",
 )
 
 
@@ -21,8 +21,14 @@ def from_explanatory_to_integers(series):
     return {v: i for i, v in enumerate(set(series.values))}
 
 
-from_boolean_to_integers_map = {False: 0, True: 1, }
-from_integers_to_boolean_map = {0: False, 1: True, }
+from_boolean_to_integers_map = {
+    False: 0,
+    True: 1,
+}
+from_integers_to_boolean_map = {
+    0: False,
+    1: True,
+}
 
 
 class DataMapper:
@@ -53,8 +59,9 @@ class DataMapper:
             if isinstance(data, pd.DataFrame):
                 if empty_column:
                     data_new = copy.deepcopy(data)
-                    data_new[empty_column] = \
-                        np.full(len(data_new[empty_column]), np.nan)
+                    data_new[empty_column] = np.full(
+                        len(data_new[empty_column]), np.nan
+                    )
                 else:
                     data_new = pd.DataFrame(
                         OrderedDict((_, []) for _ in data.columns)
@@ -63,8 +70,8 @@ class DataMapper:
                 data_new = data.copy()
             else:
                 raise AttributeError(
-                    'Invalid `data` type. It should be instance of pandas '
-                    'Series or DataFrame.'
+                    "Invalid `data` type. It should be instance of pandas "
+                    "Series or DataFrame."
                 )
 
         return data_new
@@ -89,10 +96,9 @@ class DataMapper:
         # FIXME currently we use only one mapper. In future we need add more
         self.mappers_ = {}
         for column_, type_ in self.types_.items():
-            if type_ == 'object':
+            if type_ == "object":
                 self.mappers_.setdefault(
-                    column_,
-                    from_explanatory_to_integers(data.get(column_))
+                    column_, from_explanatory_to_integers(data.get(column_))
                 )
 
     def _get_mapper_for_column(self, column_name):
@@ -222,11 +228,11 @@ class DataMapper:
         """
         if column not in self.mappers_.keys():
             raise AttributeError(
-                'Invalid name of column. Column not exists in mappers.'
+                "Invalid name of column. Column not exists in mappers."
             )
         if isinstance(data, pd.DataFrame) and column not in data.columns:
             raise AttributeError(
-                'Invalid name of column. Column not exists in data.'
+                "Invalid name of column. Column not exists in data."
             )
 
         data_new = self._get_new_data(data, empty_column=column)
@@ -237,8 +243,8 @@ class DataMapper:
             data_new.update(data.map(mapper))
         else:
             raise AttributeError(
-                'Invalid `data` type. It should be instance of pandas '
-                'Series or DataFrame.'
+                "Invalid `data` type. It should be instance of pandas "
+                "Series or DataFrame."
             )
 
         return data_new
@@ -258,11 +264,11 @@ class DataMapper:
         """
         if column not in self.mappers_.keys():
             raise AttributeError(
-                'Invalid name of column. Column not exists in mappers.'
+                "Invalid name of column. Column not exists in mappers."
             )
         if isinstance(data, pd.DataFrame) and column not in data.columns:
             raise AttributeError(
-                'Invalid name of column. Column not exists in data.'
+                "Invalid name of column. Column not exists in data."
             )
 
         data_new = self._get_new_data(data, empty_column=column)
@@ -273,8 +279,8 @@ class DataMapper:
             data_new.update(data.map(mapper))
         else:
             raise AttributeError(
-                'Invalid `data` type. It should be instance of pandas '
-                'Series or DataFrame.'
+                "Invalid `data` type. It should be instance of pandas "
+                "Series or DataFrame."
             )
 
         return data_new

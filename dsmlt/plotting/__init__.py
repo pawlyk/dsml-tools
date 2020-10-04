@@ -5,6 +5,10 @@ from .plot_features_importance import plot_features_importance
 from .plot_learning_curve import plot_learning_curve
 
 
-__all__ = ('plot_confusion_matrix', 'plot_distribution',
-           'plot_feature_distribution', 'plot_features_importance',
-           'plot_learning_curve', )
+__all__ = (
+    "plot_confusion_matrix",
+    "plot_distribution",
+    "plot_feature_distribution",
+    "plot_features_importance",
+    "plot_learning_curve",
+)

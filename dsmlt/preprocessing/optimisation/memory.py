@@ -1,12 +1,13 @@
 import numpy as np
 import pandas as pd
+
 from pandas.api.types import CategoricalDtype
 from sklearn.base import BaseEstimator, TransformerMixin
 
 from ...constants import NUMERICS, INTEGERS_RANGES, FLOATS_RANGES
 
 
-__all__ = ('MemoryOptimiser', )
+__all__ = ("MemoryOptimiser",)
 
 
 class MemoryOptimiser(BaseEstimator, TransformerMixin):
@@ -64,21 +65,22 @@ class MemoryOptimiser(BaseEstimator, TransformerMixin):
         Load data reduce memory usage.
     """
 
-    def __init__(self, mode='auto', axis=0, copy=True):
-        if isinstance(mode, str) and mode in {'auto', 'convert', }:
+    def __init__(self, mode="auto", axis=0, copy=True):
+        if isinstance(mode, str) and mode in {
+            "auto",
+            "convert",
+        }:
             self.mode = mode
 
         elif isinstance(mode, (list, tuple, dict)):
-            raise NotImplementedError('Not implemented yet.')
+            raise NotImplementedError("Not implemented yet.")
 
         elif mode in NUMERICS:
             self.mode = mode
 
         else:
             raise AttributeError(
-                'Passed invalid value of `mode` - `{}`.'.format(
-                    mode
-                )
+                "Passed invalid value of `mode` - `{}`.".format(mode)
             )
 
         self.axis = axis
@@ -89,7 +91,7 @@ class MemoryOptimiser(BaseEstimator, TransformerMixin):
 
         __init__ parameters are not touched.
         """
-        if hasattr(self, 'data_types_'):
+        if hasattr(self, "data_types_"):
             del self.data_types_
 
     def _analyze_series(self, data):
@@ -104,19 +106,19 @@ class MemoryOptimiser(BaseEstimator, TransformerMixin):
         dtype = origin_type
 
         if isinstance(origin_type, CategoricalDtype):
-            dtype = 'category'
+            dtype = "category"
 
         elif origin_type != object:
             data_min = data.min()
             data_max = data.max()
             convert = False
 
-            if self.mode == 'convert':
+            if self.mode == "convert":
                 fraction, integral = np.modf(data)
                 if not np.any(fraction):
                     convert = True
 
-            if str(origin_type)[:3] == 'int' or convert:
+            if str(origin_type)[:3] == "int" or convert:
                 for nptype, (range_min, range_max) in INTEGERS_RANGES.items():
                     if data_min > range_min and data_max < range_max:
                         dtype = nptype
@@ -144,12 +146,12 @@ class MemoryOptimiser(BaseEstimator, TransformerMixin):
             data_max = data.max()
             convert = False
 
-            if self.mode == 'convert':
+            if self.mode == "convert":
                 fraction, integral = np.modf(data)
                 if not np.any(fraction):
                     convert = True
 
-            if str(origin_type).split('.')[1][:3] == 'int' or convert:
+            if str(origin_type).split(".")[1][:3] == "int" or convert:
                 for nptype, (range_min, range_max) in INTEGERS_RANGES.items():
                     if data_min > range_min and data_max < range_max:
                         dtype = nptype
@@ -174,8 +176,9 @@ class MemoryOptimiser(BaseEstimator, TransformerMixin):
         elif isinstance(data, pd.DataFrame):
             self.data_types_ = dict()
             for column_name in data.columns:
-                self.data_types_[column_name] = \
-                    self._analyze_series(data[column_name])
+                self.data_types_[column_name] = self._analyze_series(
+                    data[column_name]
+                )
         elif isinstance(data, np.ndarray):
             self.data_types_ = self._analyze_np_array(data)
 
@@ -211,7 +214,10 @@ class MemoryOptimiser(BaseEstimator, TransformerMixin):
             self : object
                 Returns the instance itself.
         """
-        if self.mode in {'auto', 'convert', }:
+        if self.mode in {
+            "auto",
+            "convert",
+        }:
             self._data_analyze(data)
 
         elif self.mode in NUMERICS:

@@ -1,7 +1,7 @@
 from numpy import percentile
 
 
-__all__ = ('trimean', )
+__all__ = ("trimean",)
 
 
 def trimean(data):
@@ -21,6 +21,14 @@ def trimean(data):
     .. _Trimean:
         https://www.wikiwand.com/en/Trimean
     """
-    p_25, p_50, p_75 = percentile(data, [25, 50, 75, ], axis=0)
+    p_25, p_50, p_75 = percentile(
+        data,
+        [
+            25,
+            50,
+            75,
+        ],
+        axis=0,
+    )
 
     return (p_25 + 2 * p_50 + p_75) / 4

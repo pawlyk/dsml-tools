@@ -25,13 +25,13 @@ def test_random_size():
 def test_columns_names_generator():
     names = utils.columns_names_generator(10)
     assert len(names) == 10
-    assert names[0] == 'A'
-    assert names[-1] == 'J'
+    assert names[0] == "A"
+    assert names[-1] == "J"
 
     names = utils.columns_names_generator(30)
     assert len(names) == 30
-    assert names[0] == 'AB'
-    assert names[-1] == 'BF'
+    assert names[0] == "AB"
+    assert names[-1] == "BF"
 
 
 def test_random_narray():
@@ -51,10 +51,30 @@ def test_random_narray():
     assert 1 <= data.max() < high
 
     types = zip(
-        [int, np.int, np.int_, np.intc, np.intp,
-         np.int0, np.int8, np.int16, np.int32, np.int64],
-        [np.int64, np.int64, np.int64, np.int32, np.int64,
-         np.int64, np.int8, np.int16, np.int32, np.int64]
+        [
+            int,
+            np.int,
+            np.int_,
+            np.intc,
+            np.intp,
+            np.int0,
+            np.int8,
+            np.int16,
+            np.int32,
+            np.int64,
+        ],
+        [
+            np.int64,
+            np.int64,
+            np.int64,
+            np.int32,
+            np.int64,
+            np.int64,
+            np.int8,
+            np.int16,
+            np.int32,
+            np.int64,
+        ],
     )
     for type_, type_expected in types:
         data = utils.random_narray(size, dtype=type_)
@@ -93,10 +113,24 @@ def test_random_narray():
     assert 1 <= data.max() < high
 
     types = zip(
-        [float, np.float, np.float_,
-         np.float16, np.float32, np.float64, np.float128],
-        [np.float64, np.float64, np.float64,
-         np.float16, np.float32, np.float64, np.float128]
+        [
+            float,
+            np.float,
+            np.float_,
+            np.float16,
+            np.float32,
+            np.float64,
+            np.float128,
+        ],
+        [
+            np.float64,
+            np.float64,
+            np.float64,
+            np.float16,
+            np.float32,
+            np.float64,
+            np.float128,
+        ],
     )
     for type_, type_expected in types:
         data = utils.random_narray(size, dtype=type_)
@@ -121,25 +155,53 @@ def test_random_narray():
 
     # test wrong type
     with pytest.raises(AttributeError) as exc:
-        utils.random_narray((1, 2, 3, ), dtype=list)
-    assert str(exc.value) == \
-        "Passed invalid value of `astype` - <class 'list'>."
+        utils.random_narray(
+            (
+                1,
+                2,
+                3,
+            ),
+            dtype=list,
+        )
+    assert (
+        str(exc.value) == "Passed invalid value of `astype` - <class 'list'>."
+    )
 
     with pytest.raises(AttributeError) as exc:
-        utils.random_narray((1, 2, 3, ), dtype='wrong type')
-    assert str(exc.value) == \
-        "Passed invalid value of `astype` - wrong type."
+        utils.random_narray(
+            (
+                1,
+                2,
+                3,
+            ),
+            dtype="wrong type",
+        )
+    assert str(exc.value) == "Passed invalid value of `astype` - wrong type."
 
     # test wrong astype
     with pytest.raises(AttributeError) as exc:
-        utils.random_narray((1, 2, 3, ), astype=list)
-    assert str(exc.value) == \
-        "Passed invalid value of `astype` - <class 'list'>."
+        utils.random_narray(
+            (
+                1,
+                2,
+                3,
+            ),
+            astype=list,
+        )
+    assert (
+        str(exc.value) == "Passed invalid value of `astype` - <class 'list'>."
+    )
 
     with pytest.raises(AttributeError) as exc:
-        utils.random_narray((1, 2, 3, ), astype='wrong type')
-    assert str(exc.value) == \
-        "Passed invalid value of `astype` - wrong type."
+        utils.random_narray(
+            (
+                1,
+                2,
+                3,
+            ),
+            astype="wrong type",
+        )
+    assert str(exc.value) == "Passed invalid value of `astype` - wrong type."
 
 
 def test_random_series():
@@ -203,24 +265,36 @@ def test_random_dataframe():
 
     data = utils.random_dataframe(2, 3)
     assert isinstance(data, pd.DataFrame)
-    assert data.shape == (2, 3, )
+    assert data.shape == (
+        2,
+        3,
+    )
     for item_type in data.dtypes.values:
         assert item_type == np.int64
 
     data = utils.random_dataframe(2, 3, dtype=float)
     assert isinstance(data, pd.DataFrame)
-    assert data.shape == (2, 3, )
+    assert data.shape == (
+        2,
+        3,
+    )
     for item_type in data.dtypes.values:
         assert item_type == np.float64
 
     data = utils.random_dataframe(3, 4, p_missing=0.5)
     assert isinstance(data, pd.DataFrame)
-    assert data.shape == (3, 4, )
+    assert data.shape == (
+        3,
+        4,
+    )
     assert data.isna().values.sum() >= 1
 
     data = utils.random_dataframe(3, 4, dtype=float, p_missing=0.5)
     assert isinstance(data, pd.DataFrame)
-    assert data.shape == (3, 4, )
+    assert data.shape == (
+        3,
+        4,
+    )
     assert data.isna().values.sum() >= 1
 
     # test asytype int

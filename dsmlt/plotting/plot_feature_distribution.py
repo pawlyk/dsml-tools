@@ -1,12 +1,11 @@
 import numpy as np
 import scipy as sp
-
 import matplotlib as mpl
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 
 
-__all__ = ('plot_feature_distribution', )
+__all__ = ("plot_feature_distribution",)
 
 
 def plot_feature_distribution(data, num_bins=100):
@@ -29,12 +28,13 @@ def plot_feature_distribution(data, num_bins=100):
     pdf = kde.evaluate(data_grid)
 
     # plot data
-    ax0.plot(bins, y, color='green', alpha=0.5, lw=3,
-             label='Normal distribution')
-    ax0.plot(data_grid, pdf, color='blue', alpha=0.5, lw=3, label='KDE')
-    ax0.legend(loc='upper left')
+    ax0.plot(
+        bins, y, color="green", alpha=0.5, lw=3, label="Normal distribution"
+    )
+    ax0.plot(data_grid, pdf, color="blue", alpha=0.5, lw=3, label="KDE")
+    ax0.legend(loc="upper left")
     ax0.grid(True)
-    ax1.boxplot(data, 0, 'rs', 0)
+    ax1.boxplot(data, 0, "rs", 0)
     ax1.grid(True)
     ax1.yaxis.set_visible(False)
     ax1.axes.get_yaxis().set_visible(False)
