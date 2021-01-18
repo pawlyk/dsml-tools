@@ -1,5 +1,5 @@
 pytest==6.2.1
-pytest-cov==2.10.1
+pytest-cov==2.11.0
 pytest-isort==1.2.0
 codecov==2.1.11
 flake8==3.8.4
