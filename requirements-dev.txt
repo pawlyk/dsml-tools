@@ -3,6 +3,6 @@ pytest-cov==3.0.0
 pytest-isort==3.0.0
 codecov==2.1.12
 flake8==5.0.4
-black==22.6.0
+black==22.8.0
 autoflake==1.5.1
 isort==5.10.1
