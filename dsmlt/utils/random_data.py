@@ -82,7 +82,7 @@ def random_narray(
     if p_missing:
         mask = np.random.binomial(1, p_missing, size=out.shape) == 1
         if out.dtype.type in INTEGERS:
-            out = out.astype(np.float)
+            out = out.astype(float)
         out[mask] = np.NAN
 
     return out
