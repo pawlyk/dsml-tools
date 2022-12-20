@@ -53,7 +53,6 @@ def test_random_narray():
     types = zip(
         [
             int,
-            np.int,
             np.int_,
             np.intc,
             np.intp,
@@ -64,7 +63,6 @@ def test_random_narray():
             np.int64,
         ],
         [
-            np.int64,
             np.int64,
             np.int64,
             np.int32,
@@ -99,7 +97,7 @@ def test_random_narray():
 
     # test dtype float
     size = utils.random_size(3, low=1, high=10)
-    data = utils.random_narray(size, dtype=np.float)
+    data = utils.random_narray(size, dtype=float)
 
     assert data.shape == size
     assert data.size == reduce(mul, size, 1)
@@ -107,7 +105,7 @@ def test_random_narray():
 
     low = 10
     high = 100
-    data = utils.random_narray(size, dtype=np.float, low=low, high=high)
+    data = utils.random_narray(size, dtype=float, low=low, high=high)
 
     assert low <= data.min() < high
     assert 1 <= data.max() < high
@@ -115,7 +113,6 @@ def test_random_narray():
     types = zip(
         [
             float,
-            np.float,
             np.float_,
             np.float16,
             np.float32,
@@ -123,7 +120,6 @@ def test_random_narray():
             np.float128,
         ],
         [
-            np.float64,
             np.float64,
             np.float64,
             np.float16,
@@ -138,7 +134,7 @@ def test_random_narray():
 
     # test asytype float
     size = utils.random_size(3, low=1, high=10)
-    data = utils.random_narray(size, dtype=np.float, astype=np.float16)
+    data = utils.random_narray(size, dtype=float, astype=np.float16)
     assert data.dtype.type == np.float16
 
     data = utils.random_narray(size, dtype=np.float16, astype=np.float128)
@@ -217,7 +213,7 @@ def test_random_series():
     assert data.dtype.type == np.int8
 
     # test asytype float
-    data = utils.random_series(100, dtype=np.float, astype=np.float16)
+    data = utils.random_series(100, dtype=float, astype=np.float16)
     assert data.dtype.type == np.float16
 
     data = utils.random_series(100, dtype=np.float16, astype=np.float128)
@@ -267,7 +263,7 @@ def test_random_dataframe():
         assert item_type == np.int8
 
     # test asytype float
-    data = utils.random_dataframe(3, 4, dtype=np.float, astype=np.float16)
+    data = utils.random_dataframe(3, 4, dtype=float, astype=np.float16)
     for item_type in data.dtypes.values:
         assert item_type == np.float16
 
