@@ -5,4 +5,4 @@ codecov==2.1.12
 flake8==6.0.0
 black==22.12.0
 autoflake==2.0.0
-isort==5.11.3
+isort==5.11.4
