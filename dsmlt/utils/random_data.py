@@ -185,7 +185,6 @@ def random_series(
         random_narray(
             size=n, dtype=dtype, p_missing=p_missing, low=low, high=high
         ),
-        dtype=dtype,
     )
     if astype:
         out = out.astype(astype)
